@@ -1,16 +1,7 @@
-# ============================================================
-# Smart CRM – Backend Dockerfile
-# ============================================================
-FROM node:20-alpine AS base
+FROM node:20-alpine
 WORKDIR /app
-
-# Install dependencies layer (cached separately from source)
 COPY package*.json ./
-RUN npm ci --omit=dev
-
-# Copy application source
-COPY src/ ./src/
-
-EXPOSE 5000
-
-CMD ["node", "src/server.js"]
+RUN npm install --omit=dev
+COPY . .
+EXPOSE 5001
+CMD ["npm", "start"]
