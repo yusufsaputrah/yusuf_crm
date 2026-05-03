@@ -2,9 +2,6 @@ require('dotenv').config();
 const { pool } = require('../config/database');
 
 const SQL_CREATE_TABLES = `
-  -- ============================================================
-  -- USERS TABLE
-  -- ============================================================
   CREATE TABLE IF NOT EXISTS users (
     id          SERIAL PRIMARY KEY,
     full_name   VARCHAR(150) NOT NULL,
@@ -16,24 +13,18 @@ const SQL_CREATE_TABLES = `
     updated_at  TIMESTAMPTZ DEFAULT NOW()
   );
 
-  -- ============================================================
-  -- PRODUCTS TABLE (Master Data)
-  -- ============================================================
   CREATE TABLE IF NOT EXISTS products (
     id               SERIAL PRIMARY KEY,
     product_name     VARCHAR(150) NOT NULL,
     description      TEXT,
-    base_cost        NUMERIC(15, 2) NOT NULL,   -- HPP (Harga Pokok Penjualan)
-    margin_percent   NUMERIC(5, 2) NOT NULL,    -- Margin Sales (%)
+    base_cost        NUMERIC(15, 2) NOT NULL,
+    margin_percent   NUMERIC(5, 2) NOT NULL,
     selling_price    NUMERIC(15, 2) GENERATED ALWAYS AS (base_cost + (base_cost * margin_percent / 100)) STORED,
     is_active        BOOLEAN DEFAULT TRUE,
     created_at       TIMESTAMPTZ DEFAULT NOW(),
     updated_at       TIMESTAMPTZ DEFAULT NOW()
   );
 
-  -- ============================================================
-  -- LEADS TABLE (Calon Customer)
-  -- ============================================================
   CREATE TABLE IF NOT EXISTS leads (
     id            SERIAL PRIMARY KEY,
     full_name     VARCHAR(150) NOT NULL,
@@ -48,9 +39,6 @@ const SQL_CREATE_TABLES = `
     updated_at    TIMESTAMPTZ DEFAULT NOW()
   );
 
-  -- ============================================================
-  -- PROJECTS TABLE (Deal Pipeline)
-  -- ============================================================
   CREATE TABLE IF NOT EXISTS projects (
     id                SERIAL PRIMARY KEY,
     project_name      VARCHAR(200) NOT NULL,
@@ -58,7 +46,7 @@ const SQL_CREATE_TABLES = `
     sales_id          INTEGER NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
     status            VARCHAR(30) NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'waiting_approval', 'approved', 'rejected')),
     notes             TEXT,
-    needs_approval    BOOLEAN DEFAULT FALSE,   -- TRUE if any item price < selling_price
+    needs_approval    BOOLEAN DEFAULT FALSE,
     approved_by       INTEGER REFERENCES users(id),
     approved_at       TIMESTAMPTZ,
     rejection_reason  TEXT,
@@ -66,22 +54,16 @@ const SQL_CREATE_TABLES = `
     updated_at        TIMESTAMPTZ DEFAULT NOW()
   );
 
-  -- ============================================================
-  -- PROJECT ITEMS TABLE (Products per Project)
-  -- ============================================================
   CREATE TABLE IF NOT EXISTS project_items (
     id                SERIAL PRIMARY KEY,
     project_id        INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
     product_id        INTEGER NOT NULL REFERENCES products(id) ON DELETE RESTRICT,
     quantity          INTEGER NOT NULL DEFAULT 1,
-    negotiated_price  NUMERIC(15, 2) NOT NULL,  -- Harga yang disepakati
-    selling_price     NUMERIC(15, 2) NOT NULL,  -- Snapshot harga jual saat transaksi
+    negotiated_price  NUMERIC(15, 2) NOT NULL,
+    selling_price     NUMERIC(15, 2) NOT NULL,
     created_at        TIMESTAMPTZ DEFAULT NOW()
   );
 
-  -- ============================================================
-  -- CUSTOMERS TABLE (Active Customers)
-  -- ============================================================
   CREATE TABLE IF NOT EXISTS customers (
     id            SERIAL PRIMARY KEY,
     full_name     VARCHAR(150) NOT NULL,
@@ -98,9 +80,6 @@ const SQL_CREATE_TABLES = `
     updated_at    TIMESTAMPTZ DEFAULT NOW()
   );
 
-  -- ============================================================
-  -- CUSTOMER SERVICES TABLE (Layanan per Customer)
-  -- ============================================================
   CREATE TABLE IF NOT EXISTS customer_services (
     id                SERIAL PRIMARY KEY,
     customer_id       INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
@@ -112,9 +91,6 @@ const SQL_CREATE_TABLES = `
     created_at        TIMESTAMPTZ DEFAULT NOW()
   );
 
-  -- ============================================================
-  -- INDEXES for performance
-  -- ============================================================
   CREATE INDEX IF NOT EXISTS idx_leads_sales_id ON leads(sales_id);
   CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
   CREATE INDEX IF NOT EXISTS idx_projects_sales_id ON projects(sales_id);
@@ -128,16 +104,25 @@ const runMigration = async (retries = 5, delay = 3000) => {
     let client;
     try {
       console.log(`[Migration] Attempt ${attempt}/${retries} — connecting to database...`);
+      
+      const dbUrl = process.env.DATABASE_URL || '';
+      console.log(`[Migration] Target Host: ${dbUrl.split('@')[1] ? dbUrl.split('@')[1].split(':')[0] : 'Unknown'}`);
+      
       client = await pool.connect();
+      console.log('[Migration] Database connected successfully.');
+      
       console.log('[Migration] Starting database migration...');
       await client.query(SQL_CREATE_TABLES);
       console.log('[Migration] ✅ All tables created successfully.');
       return;
     } catch (error) {
-      console.error(`[Migration] ❌ Attempt ${attempt} failed: ${error.message}`);
+      console.error(`[Migration] ❌ Attempt ${attempt} failed.`);
+      console.error(`[Migration] Error Message: "${error.message}"`);
+      console.error(`[Migration] Error Code: ${error.code || 'N/A'}`);
+      
       if (attempt === retries) {
         console.error('[Migration] All retry attempts exhausted.');
-        throw error;
+        process.exit(1);
       }
       console.log(`[Migration] Retrying in ${delay / 1000}s...`);
       await new Promise((r) => setTimeout(r, delay));
