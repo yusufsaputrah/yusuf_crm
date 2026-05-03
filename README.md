@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Smart CRM – PT. Smart ISP
 
 Aplikasi CRM (Customer Relationship Management) sederhana untuk PT. Smart, sebuah perusahaan ISP, yang membantu tim sales mengelola lead, produk, pipeline deal, dan customer aktif.
@@ -198,6 +197,3 @@ docker-compose exec backend node src/database/seed.js
 ---
 
 *Happy Coding! 🚀*
-=======
-# yusuf_crm
->>>>>>> 9420449b0306099f998f0274061694483f9b34b0
