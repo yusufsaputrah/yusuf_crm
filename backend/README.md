@@ -4,16 +4,17 @@ Aplikasi CRM (Customer Relationship Management) sederhana untuk PT. Smart, sebua
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Fitur Utama & Pembaruan Terkini
 
 | Fitur | Deskripsi |
 |---|---|
-| **Login & Autentikasi** | JWT-based auth, session disimpan di localStorage |
-| **Manajemen Lead** | CRUD lead dengan status tracking (new → converted) |
-| **Master Produk** | CRUD produk dengan HPP, margin, dan harga jual otomatis |
-| **Deal Pipeline** | Buat project multi-produk, harga negosiasi, approval workflow |
-| **Customer Aktif** | Tampilkan customer berlangganan beserta layanannya |
-| **Laporan** | Ringkasan per periode + export Excel |
+| **Login & Autentikasi** | JWT auth dengan pembersihan memori (*cache clear*) otomatis antar akun |
+| **Manajemen Lead** | CRUD lead lengkap dengan data *Gender* (Pria/Wanita) dan status tracking |
+| **Master Produk** | CRUD produk dengan perhitungan margin & harga jual otomatis (*Generated Column*) |
+| **Deal Pipeline** | Flow konversi lead ke customer, multi-produk, dan *auto-flagging* approval manager |
+| **Customer Aktif** | Tampilkan customer berlangganan dengan avatar khusus gender dan perhitungan MRR |
+| **Laporan & Export** | Dashboard analitik dan fitur Download Laporan Excel yang berjalan lancar |
+| **UI/UX Modern** | Tampilan *Sky Blue* modern menggunakan Tailwind, animasi Framer Motion & Ikon |
 
 ---
 
@@ -93,20 +94,20 @@ cp .env.example .env
 npm install
 npm run migrate   # Buat semua tabel
 npm run seed      # Isi data awal (user & produk demo)
-npm run dev       # Jalankan server di port 5000
+npm run dev       # Jalankan server di port 5001
 ```
 
 **2. Setup Frontend**
 ```bash
 cd frontend
 cp .env.example .env
-# Pastikan VITE_API_BASE_URL=http://localhost:5000/api
+# Pastikan VITE_API_BASE_URL=http://localhost:5001/api
 
 npm install
-npm run dev       # Jalankan di port 3000
+npm run dev       # Jalankan di port 5173
 ```
 
-**3. Buka browser:** http://localhost:3000
+**3. Buka browser:** http://localhost:5173
 
 ---
 
@@ -127,7 +128,7 @@ docker-compose exec backend node src/database/migrate.js
 docker-compose exec backend node src/database/seed.js
 ```
 
-**Buka browser:** http://localhost:3000
+**Buka browser:** http://localhost:5173
 
 ---
 

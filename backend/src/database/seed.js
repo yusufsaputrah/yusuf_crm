@@ -1,10 +1,3 @@
-/**
- * @file seed.js
- * @description Seed script to populate initial data for development/demo purposes.
- * Creates default users (manager + sales) and sample products.
- * Run with: npm run seed
- */
-
 require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const { pool } = require('../config/database');
@@ -18,7 +11,6 @@ const runSeed = async () => {
 
     const hashedPassword = await bcrypt.hash('password123', SALT_ROUNDS);
 
-    // --- Seed Users ---
     await client.query(`
       INSERT INTO users (full_name, email, password, role) VALUES
         ('Admin Manager',  'manager@smart.id',  $1, 'manager'),
@@ -29,7 +21,6 @@ const runSeed = async () => {
 
     console.log('[Seed] ✅ Users seeded (default password: password123)');
 
-    // --- Seed Products ---
     await client.query(`
       INSERT INTO products (product_name, description, base_cost, margin_percent) VALUES
         ('Paket Internet 20 Mbps',  'Paket rumahan kecepatan 20 Mbps',  150000, 33.33),

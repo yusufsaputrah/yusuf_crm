@@ -1,20 +1,10 @@
-/**
- * @file leadController.js
- * @description CRUD operations for leads (calon customer).
- * Sales can only see/edit their own leads. Manager sees all.
- */
-
 const { query } = require('../config/database');
 
-/** Build WHERE clause based on user role for data isolation. */
 const buildOwnershipFilter = (role, salesId, paramOffset = 0) => {
   if (role === 'manager') return { clause: '', params: [] };
   return { clause: `AND l.sales_id = $${paramOffset + 1}`, params: [salesId] };
 };
 
-/**
- * GET /api/leads
- */
 const getAllLeads = async (req, res, next) => {
   try {
     const { role, id: salesId } = req.user;
@@ -56,9 +46,6 @@ const getAllLeads = async (req, res, next) => {
   }
 };
 
-/**
- * GET /api/leads/:id
- */
 const getLeadById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -84,9 +71,6 @@ const getLeadById = async (req, res, next) => {
   }
 };
 
-/**
- * POST /api/leads
- */
 const createLead = async (req, res, next) => {
   try {
     const { fullName, phone, email, address, gender, requirements, status = 'new' } = req.body;
@@ -108,16 +92,12 @@ const createLead = async (req, res, next) => {
   }
 };
 
-/**
- * PUT /api/leads/:id
- */
 const updateLead = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { role, id: salesId } = req.user;
     const { fullName, phone, email, address, gender, requirements, status } = req.body;
 
-    // Check ownership
     const ownerFilter = role === 'sales' ? 'AND sales_id = $2' : '';
     const checkParams = role === 'sales' ? [id, salesId] : [id];
     const existing = await query(`SELECT id FROM leads WHERE id = $1 ${ownerFilter}`, checkParams);
@@ -146,9 +126,6 @@ const updateLead = async (req, res, next) => {
   }
 };
 
-/**
- * DELETE /api/leads/:id
- */
 const deleteLead = async (req, res, next) => {
   try {
     const { id } = req.params;

@@ -1,8 +1,3 @@
-/**
- * @file reportRoutes.js
- * @description Routes for reporting and Excel export.
- */
-
 const express = require('express');
 const { getSummaryReport, exportReportToExcel } = require('../controllers/reportController');
 const { authenticate } = require('../middleware/authMiddleware');

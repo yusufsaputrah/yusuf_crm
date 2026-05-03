@@ -1,14 +1,5 @@
-/**
- * @file productController.js
- * @description CRUD for master product data (internet packages).
- * Only managers can create/update/delete products.
- */
-
 const { query } = require('../config/database');
 
-/**
- * GET /api/products
- */
 const getAllProducts = async (req, res, next) => {
   try {
     const result = await query(`
@@ -23,9 +14,6 @@ const getAllProducts = async (req, res, next) => {
   }
 };
 
-/**
- * GET /api/products/:id
- */
 const getProductById = async (req, res, next) => {
   try {
     const result = await query('SELECT * FROM products WHERE id = $1', [req.params.id]);
@@ -38,9 +26,6 @@ const getProductById = async (req, res, next) => {
   }
 };
 
-/**
- * POST /api/products  [Manager only]
- */
 const createProduct = async (req, res, next) => {
   try {
     const { productName, description, baseCost, marginPercent } = req.body;
@@ -61,9 +46,6 @@ const createProduct = async (req, res, next) => {
   }
 };
 
-/**
- * PUT /api/products/:id  [Manager only]
- */
 const updateProduct = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -92,9 +74,6 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-/**
- * DELETE /api/products/:id  [Manager only — soft delete]
- */
 const deleteProduct = async (req, res, next) => {
   try {
     const result = await query(

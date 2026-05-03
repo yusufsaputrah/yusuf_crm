@@ -1,15 +1,5 @@
-/**
- * @file projectController.js
- * @description Deal pipeline / project management.
- * Handles lead-to-customer conversion with multi-product support,
- * negotiated pricing, and approval workflow.
- */
-
 const { query, getClient } = require('../config/database');
 
-/**
- * GET /api/projects
- */
 const getAllProjects = async (req, res, next) => {
   try {
     const { role, id: salesId } = req.user;
@@ -53,9 +43,6 @@ const getAllProjects = async (req, res, next) => {
   }
 };
 
-/**
- * GET /api/projects/:id
- */
 const getProjectById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -93,11 +80,6 @@ const getProjectById = async (req, res, next) => {
   }
 };
 
-/**
- * POST /api/projects
- * Creates a project with one or more product items.
- * Auto-sets needs_approval = TRUE if any item price is below selling_price.
- */
 const createProject = async (req, res, next) => {
   const client = await getClient();
   try {
@@ -113,7 +95,6 @@ const createProject = async (req, res, next) => {
       });
     }
 
-    // Validate lead ownership
     const leadCheck = await client.query(
       `SELECT id FROM leads WHERE id = $1 ${req.user.role === 'sales' ? 'AND sales_id = $2' : ''}`,
       req.user.role === 'sales' ? [leadId, salesId] : [leadId]
@@ -123,7 +104,6 @@ const createProject = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Lead not found or access denied.' });
     }
 
-    // Validate all products and check if approval needed
     let needsApproval = false;
     const enrichedItems = [];
 
@@ -155,7 +135,6 @@ const createProject = async (req, res, next) => {
 
     const project = projectResult.rows[0];
 
-    // Insert items
     for (const item of enrichedItems) {
       await client.query(`
         INSERT INTO project_items (project_id, product_id, quantity, negotiated_price, selling_price)
@@ -163,7 +142,6 @@ const createProject = async (req, res, next) => {
       `, [project.id, item.productId, item.quantity || 1, item.negotiatedPrice, item.sellingPrice]);
     }
 
-    // Update lead status to 'qualified'
     await client.query(
       `UPDATE leads SET status = 'qualified', updated_at = NOW() WHERE id = $1`,
       [leadId]
@@ -186,16 +164,13 @@ const createProject = async (req, res, next) => {
   }
 };
 
-/**
- * PATCH /api/projects/:id/approve  [Manager only]
- */
 const approveProject = async (req, res, next) => {
   const client = await getClient();
   try {
     await client.query('BEGIN');
 
     const { id } = req.params;
-    const { action, rejectionReason } = req.body; // action: 'approve' | 'reject'
+    const { action, rejectionReason } = req.body; 
     const managerId = req.user.id;
 
     const projectResult = await client.query(
@@ -217,7 +192,6 @@ const approveProject = async (req, res, next) => {
       RETURNING *
     `, [newStatus, managerId, rejectionReason || null, id]);
 
-    // If approved → convert lead to customer
     if (newStatus === 'approved') {
       const project = projectResult.rows[0];
       const lead = await client.query('SELECT * FROM leads WHERE id = $1', [project.lead_id]);
@@ -241,7 +215,6 @@ const approveProject = async (req, res, next) => {
           `, [customerId, item.product_id, item.negotiated_price, item.quantity]);
         }
 
-        // Update lead status to converted
         await client.query(
           `UPDATE leads SET status = 'converted', updated_at = NOW() WHERE id = $1`,
           [leadData.id]

@@ -1,8 +1,3 @@
-/**
- * @file authRoutes.js
- * @description Routes for authentication endpoints.
- */
-
 const express = require('express');
 const { login, getProfile } = require('../controllers/authController');
 const { authenticate } = require('../middleware/authMiddleware');

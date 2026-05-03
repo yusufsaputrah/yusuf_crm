@@ -1,14 +1,5 @@
-/**
- * @file authMiddleware.js
- * @description JWT authentication middleware and role-based authorization guards.
- */
-
 const jwt = require('jsonwebtoken');
 
-/**
- * Verifies JWT token from Authorization header.
- * Attaches decoded user payload to req.user.
- */
 const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -27,9 +18,6 @@ const authenticate = (req, res, next) => {
   }
 };
 
-/**
- * Authorization guard — allows only 'manager' role.
- */
 const authorizeManager = (req, res, next) => {
   if (req.user.role !== 'manager') {
     return res.status(403).json({ success: false, message: 'Access denied. Manager role required.' });
@@ -37,9 +25,6 @@ const authorizeManager = (req, res, next) => {
   next();
 };
 
-/**
- * Authorization guard — allows both 'sales' and 'manager' roles.
- */
 const authorizeSalesOrManager = (req, res, next) => {
   if (!['sales', 'manager'].includes(req.user.role)) {
     return res.status(403).json({ success: false, message: 'Access denied.' });

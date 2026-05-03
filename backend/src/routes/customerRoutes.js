@@ -1,8 +1,3 @@
-/**
- * @file customerRoutes.js
- * @description Routes for active customer data.
- */
-
 const express = require('express');
 const { getAllCustomers, getCustomerById } = require('../controllers/customerController');
 const { authenticate } = require('../middleware/authMiddleware');

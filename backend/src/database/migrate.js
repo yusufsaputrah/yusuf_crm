@@ -1,9 +1,3 @@
-/**
- * @file migrate.js
- * @description Database migration script. Creates all tables for the Smart CRM application.
- * Run with: npm run migrate
- */
-
 require('dotenv').config();
 const { pool } = require('../config/database');
 

@@ -1,8 +1,3 @@
-/**
- * @file leadRoutes.js
- * @description Routes for lead (calon customer) management.
- */
-
 const express = require('express');
 const {
   getAllLeads,

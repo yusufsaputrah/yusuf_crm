@@ -1,12 +1,3 @@
-/**
- * @file errorMiddleware.js
- * @description Global error handling middleware for Express.
- */
-
-/**
- * Centralized error handler.
- * Catches errors passed via next(err) from any route or middleware.
- */
 const errorHandler = (err, req, res, next) => {
   console.error('[Error]', err.stack || err.message);
 
@@ -20,9 +11,6 @@ const errorHandler = (err, req, res, next) => {
   });
 };
 
-/**
- * 404 Not Found handler for unmatched routes.
- */
 const notFoundHandler = (req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found.` });
 };

@@ -1,8 +1,3 @@
-/**
- * @file productRoutes.js
- * @description Routes for product master data management.
- */
-
 const express = require('express');
 const {
   getAllProducts,

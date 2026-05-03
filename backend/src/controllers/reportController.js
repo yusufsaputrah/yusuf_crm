@@ -1,14 +1,6 @@
-/**
- * @file reportController.js
- * @description Generates reports with date filters and Excel export capability.
- */
-
 const XLSX = require('xlsx');
 const { query } = require('../config/database');
 
-/**
- * GET /api/reports/summary?startDate=&endDate=
- */
 const getSummaryReport = async (req, res, next) => {
   try {
     const { role, id: salesId } = req.user;
@@ -24,7 +16,6 @@ const getSummaryReport = async (req, res, next) => {
     params.push(dateEnd);
     const endParam = params.length;
 
-    // Approved projects in period
     const projectsResult = await query(`
       SELECT
         p.id, p.project_name, p.status, p.created_at,
@@ -42,7 +33,6 @@ const getSummaryReport = async (req, res, next) => {
       ORDER BY p.created_at DESC
     `, params);
 
-    // Leads summary
     const leadsResult = await query(`
       SELECT status, COUNT(*) AS count
       FROM leads
@@ -68,10 +58,6 @@ const getSummaryReport = async (req, res, next) => {
   }
 };
 
-/**
- * GET /api/reports/export?startDate=&endDate=
- * Downloads an Excel file with report data.
- */
 const exportReportToExcel = async (req, res, next) => {
   try {
     const { role, id: salesId } = req.user;

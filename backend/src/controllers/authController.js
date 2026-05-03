@@ -1,16 +1,7 @@
-/**
- * @file authController.js
- * @description Handles user authentication: login and token refresh.
- */
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/database');
 
-/**
- * POST /api/auth/login
- * Authenticates a user and returns a JWT token.
- */
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -59,10 +50,6 @@ const login = async (req, res, next) => {
   }
 };
 
-/**
- * GET /api/auth/profile
- * Returns the current authenticated user's profile.
- */
 const getProfile = async (req, res, next) => {
   try {
     const result = await query(

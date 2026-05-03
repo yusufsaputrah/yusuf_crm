@@ -1,8 +1,3 @@
-/**
- * @file projectRoutes.js
- * @description Routes for project / deal pipeline management.
- */
-
 const express = require('express');
 const {
   getAllProjects,

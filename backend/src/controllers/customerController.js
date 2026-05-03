@@ -1,13 +1,5 @@
-/**
- * @file customerController.js
- * @description Manages active customers and their service subscriptions.
- */
-
 const { query } = require('../config/database');
 
-/**
- * GET /api/customers
- */
 const getAllCustomers = async (req, res, next) => {
   try {
     const { role, id: salesId } = req.user;
@@ -40,9 +32,6 @@ const getAllCustomers = async (req, res, next) => {
   }
 };
 
-/**
- * GET /api/customers/:id
- */
 const getCustomerById = async (req, res, next) => {
   try {
     const { id } = req.params;
