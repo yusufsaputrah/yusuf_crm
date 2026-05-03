@@ -19,7 +19,8 @@ if (process.env.DATABASE_URL) {
   poolConfig.database = process.env.DB_NAME;
   poolConfig.user = process.env.DB_USER;
   poolConfig.password = process.env.DB_PASSWORD;
-  poolConfig.ssl = false;
+  // Enable SSL by default for external databases; set DB_NO_SSL=1 to disable
+  poolConfig.ssl = process.env.DB_NO_SSL ? false : { rejectUnauthorized: false };
 }
 
 const pool = new Pool(poolConfig);
