@@ -1,7 +1,5 @@
 const { Pool } = require('pg');
 
-const isInternal = process.env.DATABASE_URL && process.env.DATABASE_URL.includes('railway.internal');
-
 const poolConfig = {
   max: 10,
   idleTimeoutMillis: 30000,
@@ -10,17 +8,20 @@ const poolConfig = {
 
 if (process.env.DATABASE_URL) {
   poolConfig.connectionString = process.env.DATABASE_URL;
-  // Jika internal (railway.internal) biasanya tidak perlu SSL. 
-  // Jika external (proxy/public) wajib pakai SSL rejectUnauthorized false.
-  poolConfig.ssl = isInternal ? false : { rejectUnauthorized: false };
 } else {
   poolConfig.host = process.env.DB_HOST;
   poolConfig.port = parseInt(process.env.DB_PORT, 10) || 5432;
   poolConfig.database = process.env.DB_NAME;
   poolConfig.user = process.env.DB_USER;
   poolConfig.password = process.env.DB_PASSWORD;
-  // Enable SSL by default for external databases; set DB_NO_SSL=1 to disable
-  poolConfig.ssl = process.env.DB_NO_SSL ? false : { rejectUnauthorized: false };
+}
+
+// Paksa SSL aktif untuk Railway (Proxy/Public memerlukan SSL)
+// Jika koneksi lokal, biasanya env DATABASE_URL tidak ada, kita bisa beri kondisi tambahan jika perlu.
+const isProduction = process.env.NODE_ENV === 'production' || process.env.DATABASE_URL || process.env.DB_HOST?.includes('rlwy.net');
+
+if (isProduction) {
+  poolConfig.ssl = { rejectUnauthorized: false };
 }
 
 const pool = new Pool(poolConfig);
