@@ -186,14 +186,37 @@ docker-compose exec backend node src/database/seed.js
 
 ---
 
-## 📦 Deploy ke Cloud
+## 📦 Panduan Deploy ke Cloud (Production)
 
-**Railway / Render (recommended):**
-1. Push repo ke GitHub
-2. Buat project baru di Railway/Render
-3. Tambahkan service PostgreSQL
-4. Set environment variables sesuai `.env.example`
-5. Deploy backend & frontend sebagai service terpisah
+Arsitektur aplikasi ini terdiri dari Frontend SPA (React/Vite) dan Backend REST API (Express.js). Berikut adalah rekomendasi infrastruktur gratis untuk *technical test*:
+
+### 1. Deploy Frontend (Vercel)
+Vercel sangat optimal untuk aplikasi SPA statis seperti React/Vite.
+1. Push repositori ini ke GitHub.
+2. Login ke [Vercel](https://vercel.com/) dan buat project baru dari repository GitHub Anda.
+3. Vercel akan otomatis mendeteksi framework (Vite).
+4. Pada menu **Environment Variables**, tambahkan:
+   - `VITE_API_BASE_URL` = `https://<URL_BACKEND_ANDA>/api`
+5. Klik **Deploy**.
+
+### 2. Deploy Database (Render / Neon)
+1. Buat layanan **PostgreSQL** gratis di [Render.com](https://render.com) atau [Neon.tech](https://neon.tech).
+2. Simpan kredensial Database URL (Host, User, Password).
+
+### 3. Deploy Backend (Render)
+Backend Express.js membutuhkan layanan *long-running server*.
+1. Di Dashboard Render, klik **New > Web Service**.
+2. Hubungkan ke repositori GitHub Anda (Pilih *Root Directory*: `backend`).
+3. Set **Build Command**: `npm install` dan **Start Command**: `node src/server.js`.
+4. Masukkan **Environment Variables**:
+   - `NODE_ENV` = `production`
+   - `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` = *(Isi dari Langkah 2)*
+   - `JWT_SECRET` = *(Password rahasia Anda)*
+   - `FRONTEND_URL` = `https://<URL_VERCEL_ANDA>.vercel.app` (Penting untuk CORS).
+5. Klik **Deploy**.
+6. Setelah Backend online, masuk ke **Shell** Render dan jalankan:
+   - `npm run migrate` (Membuat tabel)
+   - `npm run seed` (Mengisi akun default)
 
 ---
 
