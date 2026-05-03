@@ -80,7 +80,6 @@ const CustomerDetail = ({ customerId }) => {
   );
 };
 
-// ─── Main Page ─────────────────────────────────────────────────────────────────
 const CustomersPage = () => {
   const [search, setSearch] = useState('');
   const [expandedId, setExpandedId] = useState(null);

@@ -215,7 +215,7 @@ const LoginPage = () => {
               <label className="label lg:text-slate-500 text-sky-300">Email</label>
               <div className="relative">
                 <motion.div
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                  className="absolute left-3.5 top-0 bottom-0 flex items-center pointer-events-none"
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
                 >
@@ -239,7 +239,7 @@ const LoginPage = () => {
               <label className="label lg:text-slate-500 text-sky-300">Password</label>
               <div className="relative">
                 <motion.div
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+                  className="absolute left-3.5 top-0 bottom-0 flex items-center pointer-events-none"
                   animate={{ rotate: [0, -12, 12, 0] }}
                   transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
                 >
@@ -260,7 +260,7 @@ const LoginPage = () => {
                   tabIndex={-1}
                   aria-label={showPassword ? 'Sembunyikan password' : 'Tampilkan password'}
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                  className="absolute right-3 top-0 bottom-0 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
                 >
                   <AnimatePresence mode="wait" initial={false}>
                     {showPassword ? (

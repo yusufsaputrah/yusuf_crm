@@ -17,7 +17,6 @@ import {
 const manIconUrl = new URL('../assets/icons/bussiness-man.png', import.meta.url).href;
 const womanIconUrl = new URL('../assets/icons/businesswoman.png', import.meta.url).href;
 
-// ─── Lead Form ─────────────────────────────────────────────────────────────────
 const LeadForm = ({ initialData, onSubmit, isLoading }) => {
   const [form, setForm] = useState({
     fullName:     initialData?.full_name     || '',
@@ -68,7 +67,7 @@ const LeadForm = ({ initialData, onSubmit, isLoading }) => {
         <textarea name="requirements" value={form.requirements} onChange={handleChange} className="input" rows={2} placeholder="Butuh paket internet..." />
       </FormGroup>
       <div className="flex gap-2 justify-end pt-2 border-t border-slate-100">
-        <motion.button type="submit" className="btn-primary" disabled={isLoading} whileTap={{ scale: 0.97 }}>
+        <motion.button type="submit" className="btn-emerald" disabled={isLoading} whileTap={{ scale: 0.97 }}>
           {isLoading ? 'Menyimpan...' : 'Simpan Data'}
         </motion.button>
       </div>
@@ -76,7 +75,6 @@ const LeadForm = ({ initialData, onSubmit, isLoading }) => {
   );
 };
 
-// ─── Lead Card (mobile view) ──────────────────────────────────────────────────
 const LeadCard = ({ lead, onEdit, onDelete, idx }) => (
   <motion.div
     className="card p-4"
@@ -86,8 +84,12 @@ const LeadCard = ({ lead, onEdit, onDelete, idx }) => (
   >
     <div className="flex items-start justify-between gap-2 mb-3">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-10 h-10 bg-sky-50 border border-sky-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-          <User size={18} className="text-sky-600" />
+        <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm p-1">
+          <img 
+            src={lead.gender === 'wanita' ? womanIconUrl : manIconUrl} 
+            alt="Avatar" 
+            className="w-full h-full object-contain drop-shadow-sm" 
+          />
         </div>
         <div className="min-w-0">
           <p className="font-semibold text-slate-900 text-sm truncate">{lead.full_name}</p>
@@ -140,7 +142,6 @@ const LeadCard = ({ lead, onEdit, onDelete, idx }) => (
   </motion.div>
 );
 
-// ─── Main Page ─────────────────────────────────────────────────────────────────
 const LeadsPage = () => {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
@@ -199,7 +200,7 @@ const LeadsPage = () => {
           </div>
         </div>
         <motion.button
-          className="btn-primary flex-shrink-0"
+          className="btn-emerald flex-shrink-0"
           onClick={() => setIsFormOpen(true)}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}

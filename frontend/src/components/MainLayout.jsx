@@ -16,12 +16,10 @@ const MainLayout = () => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // Tutup sidebar otomatis saat navigasi (mobile)
   useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
 
-  // Tutup sidebar saat resize ke desktop
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 1024) setSidebarOpen(false);

@@ -62,12 +62,10 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
   );
 };
 
-// ─── Badge ────────────────────────────────────────────────────────────────────
 export const Badge = ({ label, color = 'bg-slate-100 text-slate-700' }) => (
   <span className={`badge ${color}`}>{label}</span>
 );
 
-// ─── Spinner / Loader ─────────────────────────────────────────────────────────
 export const Spinner = ({ size = 24 }) => (
   <Loader2
     size={size}
@@ -87,7 +85,6 @@ export const PageLoader = () => (
   </div>
 );
 
-// ─── Empty State ──────────────────────────────────────────────────────────────
 export const EmptyState = ({ title = 'Tidak ada data', description = '' }) => (
   <motion.div
     className="flex flex-col items-center justify-center py-16 text-center"
@@ -218,7 +215,6 @@ export const LogoutConfirmDialog = ({ isOpen, onClose, onConfirm }) => (
   </AnimatePresence>
 );
 
-// ─── Form Group ───────────────────────────────────────────────────────────────
 export const FormGroup = ({ label, required, children, error }) => (
   <div>
     <label className="label">
@@ -240,7 +236,6 @@ export const FormGroup = ({ label, required, children, error }) => (
   </div>
 );
 
-// ─── Stats Card ───────────────────────────────────────────────────────────────
 export const StatsCard = ({
   label,
   value,

@@ -22,7 +22,6 @@ import { LEAD_STATUSES, PROJECT_STATUSES } from '../constants/appConstants';
 const manIconUrl = new URL('../assets/icons/bussiness-man.png', import.meta.url).href;
 const womanIconUrl = new URL('../assets/icons/businesswoman.png', import.meta.url).href;
 
-/* ─── Konstanta ─────────────────────────────────────────────────────────────── */
 const STATUS_COLORS = {
   new:       '#0ea5e9',
   contacted: '#f59e0b',
@@ -46,7 +45,6 @@ const getGreeting = () => {
   return 'Selamat Malam';
 };
 
-/* ─── Sub-components ─────────────────────────────────────────────────────────── */
 const MetricCard = ({ label, value, icon: Icon, iconBg, iconColor, accentClass, sub }) => (
   <motion.div
     className="card p-4 relative overflow-hidden"
@@ -57,7 +55,7 @@ const MetricCard = ({ label, value, icon: Icon, iconBg, iconColor, accentClass, 
     <div className="flex items-start justify-between pl-2">
       <div className="flex-1 min-w-0">
         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{label}</p>
-        <p className="text-xl font-bold text-slate-900 mt-1.5 truncate">{value}</p>
+        <p className="text-base sm:text-xl font-bold text-slate-900 mt-1.5 break-words">{value}</p>
         {sub && <p className="text-[11px] text-slate-400 mt-0.5">{sub}</p>}
       </div>
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ml-3 ${iconBg}`}>
@@ -80,7 +78,6 @@ const CustomTooltip = ({ active, payload }) => {
   );
 };
 
-/* ─── Main ───────────────────────────────────────────────────────────────────── */
 const DashboardPage = () => {
   const { authUser, isManager } = useAuth();
   const navigate = useNavigate();

@@ -1,18 +1,20 @@
-# ============================================================
-# Smart CRM – Frontend Dockerfile (multi-stage)
-# ============================================================
+# Menggunakan image Node.js versi 18 Alpine yang ringan
+FROM node:18-alpine
 
-# Stage 1: Build
-FROM node:20-alpine AS builder
+# Set direktori kerja di dalam container
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
 
-# Stage 2: Serve with nginx
-FROM nginx:alpine AS production
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Salin package.json dan package-lock.json terlebih dahulu
+COPY package*.json ./
+
+# Install dependensi
+RUN npm install
+
+# Salin seluruh kode sumber frontend
+COPY . .
+
+# Ekspose port 3000
+EXPOSE 3000
+
+# Perintah untuk menjalankan frontend di mode development dengan host terbuka
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

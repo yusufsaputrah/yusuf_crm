@@ -23,7 +23,6 @@ import { STORAGE_KEYS, LEAD_STATUSES, PROJECT_STATUSES } from '../constants/appC
 import { formatRupiah, formatDate } from '../utils/formatUtils';
 import { PageLoader } from '../components/UIComponents';
 
-// ─── Status config with chart colors ──────────────────────────────────────────
 const STATUS_CONFIG = {
   new:       { color: '#0ea5e9', bg: '#e0f2fe', icon: Layers },
   contacted: { color: '#f59e0b', bg: '#fef3c7', icon: Clock },
@@ -32,7 +31,6 @@ const STATUS_CONFIG = {
   lost:      { color: '#f43f5e', bg: '#ffe4e6', icon: XCircle },
 };
 
-// ─── Custom Tooltip untuk Area Chart ──────────────────────────────────────────
 const AreaTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
   return (
@@ -49,7 +47,6 @@ const AreaTooltip = ({ active, payload, label }) => {
   );
 };
 
-// ─── Conversion Funnel Bar ─────────────────────────────────────────────────────
 const FunnelBar = ({ label, count, total, color, bg, Icon, delay }) => {
   const pct = total > 0 ? Math.round((count / total) * 100) : 0;
   return (
@@ -91,7 +88,6 @@ const FunnelBar = ({ label, count, total, color, bg, Icon, delay }) => {
   );
 };
 
-// ─── KPI Tile ──────────────────────────────────────────────────────────────────
 const KpiTile = ({ label, value, sub, icon: Icon, accentBg, accentText, accentBar, delay }) => (
   <motion.div
     className="card p-4 relative overflow-hidden"
@@ -105,7 +101,7 @@ const KpiTile = ({ label, value, sub, icon: Icon, accentBg, accentText, accentBa
     <div className="flex items-start justify-between gap-3">
       <div className="flex-1 min-w-0 pt-1">
         <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-1">{label}</p>
-        <p className={`text-xl sm:text-2xl font-bold truncate ${accentText}`}>{value}</p>
+        <p className={`text-base sm:text-2xl font-bold break-words ${accentText}`}>{value}</p>
         {sub && <p className="text-[11px] text-slate-400 mt-1">{sub}</p>}
       </div>
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${accentBg}`}>
@@ -115,7 +111,6 @@ const KpiTile = ({ label, value, sub, icon: Icon, accentBg, accentText, accentBa
   </motion.div>
 );
 
-// ─── Project Rank Row ──────────────────────────────────────────────────────────
 const ProjectRow = ({ proj, rank, idx }) => {
   const rankColors = ['bg-amber-400', 'bg-slate-300', 'bg-orange-400'];
   const rankBg = rank <= 3 ? rankColors[rank - 1] : 'bg-slate-100';
@@ -142,7 +137,6 @@ const ProjectRow = ({ proj, rank, idx }) => {
   );
 };
 
-// ─── Main Page ─────────────────────────────────────────────────────────────────
 const ReportsPage = () => {
   const today = new Date().toISOString().split('T')[0];
   const firstDayOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
@@ -191,7 +185,6 @@ const ReportsPage = () => {
 
   if (isLoading) return <PageLoader />;
 
-  // ── Derived data ────────────────────────────────────────────────────────────
   const totalLeads = reportData?.leadsByStatus?.reduce((a, s) => a + parseInt(s.count), 0) || 0;
   const convertedCount = reportData?.leadsByStatus?.find(s => s.status === 'converted')?.count || 0;
   const conversionRate = totalLeads > 0 ? Math.round((convertedCount / totalLeads) * 100) : 0;
@@ -236,7 +229,7 @@ const ReportsPage = () => {
           </div>
         </div>
         <motion.button
-          className="btn-primary flex-shrink-0"
+          className="btn-amber flex-shrink-0"
           onClick={handleExportExcel}
           disabled={isExporting}
           whileHover={{ scale: 1.02 }}
@@ -283,7 +276,7 @@ const ReportsPage = () => {
             </div>
           </div>
           <motion.button
-            className="btn-primary sm:flex-shrink-0 justify-center"
+            className="btn-secondary sm:flex-shrink-0 justify-center"
             onClick={() => refetch()}
             disabled={isFetching}
             whileTap={{ scale: 0.97 }}
@@ -519,7 +512,7 @@ const ReportsPage = () => {
         >
           <div>
             <p className="text-sky-100 text-xs font-semibold uppercase tracking-widest">Total Revenue Periode Ini</p>
-            <p className="text-white text-3xl font-bold mt-1 tracking-tight">
+            <p className="text-white text-xl sm:text-3xl font-bold mt-1 tracking-tight break-words">
               {formatRupiah(reportData.totalRevenue)}
             </p>
             <p className="text-sky-200 text-xs mt-1">

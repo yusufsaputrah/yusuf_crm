@@ -29,46 +29,28 @@ Aplikasi CRM (Customer Relationship Management) sederhana untuk PT. Smart, sebua
 
 ---
 
-## 🏗 Arsitektur & Struktur Project
+## 🏗 Arsitektur & Struktur Project (Modular Architecture)
+
+Aplikasi Frontend dibangun dengan prinsip **Separation of Concerns (Modular Architecture)**. Pemisahan dilakukan berdasarkan layer dan fungsinya sehingga memenuhi standar industri yang *Clean* dan *Maintainable*:
 
 ```
-smart-crm/
-├── backend/                    # Express.js REST API
-│   ├── src/
-│   │   ├── config/
-│   │   │   └── database.js     # PostgreSQL connection pool
-│   │   ├── controllers/        # Business logic layer
-│   │   │   ├── authController.js
-│   │   │   ├── leadController.js
-│   │   │   ├── productController.js
-│   │   │   ├── projectController.js
-│   │   │   ├── customerController.js
-│   │   │   └── reportController.js
-│   │   ├── middleware/
-│   │   │   ├── authMiddleware.js   # JWT verify + role guard
-│   │   │   └── errorMiddleware.js  # Global error handler
-│   │   ├── routes/             # Express routers
-│   │   ├── database/
-│   │   │   ├── migrate.js      # DDL migration script
-│   │   │   └── seed.js         # Initial data seeder
-│   │   └── server.js           # App entry point
-│   ├── .env.example            # ← Copy ke .env
-│   ├── Dockerfile
-│   └── package.json
-│
-├── frontend/                   # React 18 + Vite + Tailwind
-│   ├── src/
-│   │   ├── components/         # Shared UI primitives & layout
-│   │   ├── constants/          # API endpoints, status maps
-│   │   ├── context/            # AuthContext (global state)
-│   │   ├── pages/              # Route-level page components
-│   │   ├── services/           # Axios instance + interceptors
-│   │   └── utils/              # Format helpers (Rupiah, date)
-│   ├── .env.example            # ← Copy ke .env
-│   ├── Dockerfile
-│   └── vite.config.js
-│
-├── docker-compose.yml
+frontend/
+├── Dockerfile                  # Konfigurasi image Docker frontend
+├── docker-compose.yml          # Konfigurasi containerisasi frontend
+├── vite.config.js              # Build tool config
+├── src/
+│   ├── components/             # Reusable UI Primitives (Modal, Badge, Layout)
+│   │   └── UIComponents.jsx
+│   ├── constants/              # Data konstan & Endpoint configuration
+│   │   └── appConstants.js
+│   ├── context/                # Global State Management (AuthContext)
+│   ├── pages/                  # Halaman utama aplikasi (View Layer)
+│   │   ├── LoginPage.jsx
+│   │   ├── DashboardPage.jsx
+│   │   └── ...
+│   ├── services/               # Abstraksi Jaringan API (Layer Infrastruktur)
+│   │   └── apiService.js       # Axios instance & interceptors
+│   └── utils/                  # Utility helper (format uang, tanggal)
 └── README.md
 ```
 
@@ -93,14 +75,14 @@ cp .env.example .env
 npm install
 npm run migrate   # Buat semua tabel
 npm run seed      # Isi data awal (user & produk demo)
-npm run dev       # Jalankan server di port 5000
+npm run dev       # Jalankan server di port 5001
 ```
 
 **2. Setup Frontend**
 ```bash
 cd frontend
 cp .env.example .env
-# Pastikan VITE_API_BASE_URL=http://localhost:5000/api
+# Pastikan VITE_API_BASE_URL=http://localhost:5001/api
 
 npm install
 npm run dev       # Jalankan di port 3000
@@ -110,21 +92,18 @@ npm run dev       # Jalankan di port 3000
 
 ---
 
-### Option B: Docker Compose
+### Option B: Docker Compose (Containerization)
+
+Sebagai nilai tambah arsitektur *deployment*, kami telah menyediakan `Dockerfile` dan `docker-compose.yml` khusus untuk isolasi servis *Frontend*:
 
 ```bash
-# 1. Setup env files
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+# 1. Setup env file
+cp .env.example .env
 
-# 2. Edit backend/.env — sesuaikan DB_PASSWORD dan JWT_SECRET
+# 2. Jalankan container frontend
+docker-compose up -d --build
 
-# 3. Jalankan semua service
-docker-compose up --build
-
-# 4. Jalankan migrasi & seed (sekali saja)
-docker-compose exec backend node src/database/migrate.js
-docker-compose exec backend node src/database/seed.js
+# 3. Frontend akan berjalan dan bisa diakses via browser
 ```
 
 **Buka browser:** http://localhost:3000

@@ -24,6 +24,21 @@
            hover:bg-sky-600 active:bg-sky-700 transition-all duration-200 shadow-sm
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
+  .btn-emerald {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500 text-white text-sm font-semibold rounded-xl
+           hover:bg-emerald-600 active:bg-emerald-700 transition-all duration-200 shadow-sm
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-violet {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 bg-violet-500 text-white text-sm font-semibold rounded-xl
+           hover:bg-violet-600 active:bg-violet-700 transition-all duration-200 shadow-sm
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-amber {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 bg-amber-500 text-white text-sm font-semibold rounded-xl
+           hover:bg-amber-600 active:bg-amber-700 transition-all duration-200 shadow-sm
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
   .btn-secondary {
     @apply inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700
            text-sm font-semibold rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 shadow-sm;

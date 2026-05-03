@@ -60,7 +60,7 @@ const ProductForm = ({ initialData, onSubmit, isLoading }) => {
       )}
 
       <div className="flex justify-end pt-2 border-t border-slate-100">
-        <motion.button type="submit" className="btn-primary" disabled={isLoading} whileTap={{ scale: 0.97 }}>
+        <motion.button type="submit" className="btn-violet" disabled={isLoading} whileTap={{ scale: 0.97 }}>
           {isLoading ? 'Menyimpan...' : 'Simpan Produk'}
         </motion.button>
       </div>
@@ -127,7 +127,7 @@ const ProductsPage = () => {
         </div>
         {isManager && (
           <motion.button
-            className="btn-primary"
+            className="btn-violet"
             onClick={() => setIsFormOpen(true)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.97 }}
@@ -161,7 +161,7 @@ const ProductsPage = () => {
                   <img src={routerIconUrl} alt="Router" className="w-full h-full object-contain drop-shadow-sm" />
                 </div>
                 {isManager && (
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-1 sm:opacity-100 transition-opacity">
                     <button
                       onClick={() => setSelectedProduct(product)}
                       className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition-all"

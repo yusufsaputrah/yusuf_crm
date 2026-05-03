@@ -19,7 +19,6 @@ import { Modal, Badge, PageLoader, EmptyState, FormGroup } from '../components/U
 
 const customerIconUrl = new URL('../assets/icons/customer.png', import.meta.url).href;
 
-// ─── Project Form ──────────────────────────────────────────────────────────────
 const ProjectForm = ({ onSubmit, isLoading }) => {
   const [projectName, setProjectName] = useState('');
   const [leadId, setLeadId] = useState('');
@@ -158,7 +157,7 @@ const ProjectForm = ({ onSubmit, isLoading }) => {
       </div>
 
       <div className="flex justify-end pt-2 border-t border-slate-100">
-        <motion.button type="submit" className="btn-primary" disabled={isLoading} whileTap={{ scale: 0.97 }}>
+        <motion.button type="submit" className="btn-emerald" disabled={isLoading} whileTap={{ scale: 0.97 }}>
           {isLoading ? 'Menyimpan...' : 'Buat Project'}
         </motion.button>
       </div>
@@ -166,7 +165,6 @@ const ProjectForm = ({ onSubmit, isLoading }) => {
   );
 };
 
-// ─── Approval Modal ────────────────────────────────────────────────────────────
 const ApprovalModal = ({ project, onClose }) => {
   const [reason, setReason] = useState('');
   const queryClient = useQueryClient();
@@ -213,7 +211,7 @@ const ApprovalModal = ({ project, onClose }) => {
             <XCircle size={15} /> Tolak
           </motion.button>
           <motion.button
-            className="btn-primary flex-1 justify-center"
+            className="btn-emerald flex-1 justify-center"
             onClick={() => approveMutation.mutate({ action: 'approve' })}
             disabled={approveMutation.isPending}
             whileTap={{ scale: 0.97 }}
@@ -226,7 +224,6 @@ const ApprovalModal = ({ project, onClose }) => {
   );
 };
 
-// ─── Project Items Detail ──────────────────────────────────────────────────────
 const ProjectItemsDetail = ({ projectId }) => {
   const { data, isLoading } = useQuery({
     queryKey: ['project-detail', projectId],
@@ -257,7 +254,6 @@ const ProjectItemsDetail = ({ projectId }) => {
   );
 };
 
-// ─── Main Page ─────────────────────────────────────────────────────────────────
 const ProjectsPage = () => {
   const { isManager } = useAuth();
   const queryClient = useQueryClient();
@@ -309,7 +305,7 @@ const ProjectsPage = () => {
           </div>
         </div>
         <motion.button
-          className="btn-primary flex-shrink-0"
+          className="btn-emerald flex-shrink-0"
           onClick={() => setIsFormOpen(true)}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
@@ -328,19 +324,28 @@ const ProjectsPage = () => {
         transition={{ delay: 0.1 }}
         style={{ WebkitOverflowScrolling: 'touch' }}
       >
-        {filterButtons.map(({ val, label }) => (
-          <button
-            key={val}
-            onClick={() => setStatusFilter(val)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
-              statusFilter === val
-                ? 'bg-sky-500 text-white shadow-sm'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
+        {filterButtons.map(({ val, label }) => {
+          const isActive = statusFilter === val;
+          let activeColor = 'bg-slate-800 text-white';
+          if (val === 'draft') activeColor = 'bg-slate-500 text-white';
+          if (val === 'waiting_approval') activeColor = 'bg-amber-500 text-white';
+          if (val === 'approved') activeColor = 'bg-emerald-500 text-white';
+          if (val === 'rejected') activeColor = 'bg-red-500 text-white';
+
+          return (
+            <button
+              key={val}
+              onClick={() => setStatusFilter(val)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex-shrink-0 ${
+                isActive
+                  ? activeColor + ' shadow-sm'
+                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+              }`}
+            >
+              {label}
+            </button>
+          );
+        })}
       </motion.div>
 
       {/* Projects List */}
@@ -364,7 +369,7 @@ const ProjectsPage = () => {
                 <div className="p-4">
                   <div className="flex items-start gap-3">
                     {/* Icon */}
-                    <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center p-1.5 border border-emerald-100 flex-shrink-0 mt-0.5 shadow-sm">
+                    <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center p-1.5 border border-slate-100 flex-shrink-0 mt-0.5 shadow-sm">
                       <img src={customerIconUrl} alt="Deal" className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
 
@@ -395,7 +400,7 @@ const ProjectsPage = () => {
                       {isManager && proj.status === 'waiting_approval' && (
                         <motion.button
                           onClick={() => setApprovalTarget(proj)}
-                          className="btn-primary py-1.5 text-xs"
+                          className="btn-emerald py-1.5 text-xs"
                           whileTap={{ scale: 0.97 }}
                         >
                           <Clock size={13} /> Review
