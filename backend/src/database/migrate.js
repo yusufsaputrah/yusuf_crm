@@ -123,19 +123,36 @@ const SQL_CREATE_TABLES = `
   CREATE INDEX IF NOT EXISTS idx_project_items_project_id ON project_items(project_id);
 `;
 
-const runMigration = async () => {
-  const client = await pool.connect();
-  try {
-    console.log('[Migration] Starting database migration...');
-    await client.query(SQL_CREATE_TABLES);
-    console.log('[Migration] ✅ All tables created successfully.');
-  } catch (error) {
-    console.error('[Migration] ❌ Migration failed:', error.message);
-    throw error;
-  } finally {
-    client.release();
-    await pool.end();
+const runMigration = async (retryCount = 5) => {
+  for (let i = 0; i < retryCount; i++) {
+    let client;
+    try {
+      console.log(`[Migration] Attempt ${i + 1} of ${retryCount}...`);
+      client = await pool.connect();
+      console.log('[Migration] Database connected.');
+      
+      console.log('[Migration] Starting database migration...');
+      await client.query(SQL_CREATE_TABLES);
+      console.log('[Migration] ✅ All tables created successfully.');
+      
+      return; // Success, exit the loop
+    } catch (error) {
+      console.error(`[Migration] ❌ Attempt ${i + 1} failed:`, error.message);
+      
+      if (i === retryCount - 1) {
+        console.error('[Migration] ❌ Maximum retries reached. Exiting.');
+        process.exit(1);
+      }
+      
+      const waitTime = Math.pow(2, i) * 1000;
+      console.log(`[Migration] Retrying in ${waitTime / 1000}s...`);
+      await new Promise(resolve => setTimeout(resolve, waitTime));
+    } finally {
+      if (client) client.release();
+    }
   }
 };
 
-runMigration();
+runMigration().then(() => {
+  pool.end();
+});
