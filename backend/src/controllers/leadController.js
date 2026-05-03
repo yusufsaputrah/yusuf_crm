@@ -40,7 +40,7 @@ const getAllLeads = async (req, res, next) => {
 
     const sql = `
       SELECT
-        l.id, l.full_name, l.phone, l.email, l.address,
+        l.id, l.full_name, l.phone, l.email, l.address, l.gender,
         l.requirements, l.status, l.created_at, l.updated_at,
         u.full_name AS sales_name
       FROM leads l
@@ -89,7 +89,7 @@ const getLeadById = async (req, res, next) => {
  */
 const createLead = async (req, res, next) => {
   try {
-    const { fullName, phone, email, address, requirements, status = 'new' } = req.body;
+    const { fullName, phone, email, address, gender, requirements, status = 'new' } = req.body;
     const salesId = req.user.id;
 
     if (!fullName) {
@@ -97,10 +97,10 @@ const createLead = async (req, res, next) => {
     }
 
     const result = await query(`
-      INSERT INTO leads (full_name, phone, email, address, requirements, status, sales_id)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO leads (full_name, phone, email, address, gender, requirements, status, sales_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
-    `, [fullName, phone, email, address, requirements, status, salesId]);
+    `, [fullName, phone, email, address, gender, requirements, status, salesId]);
 
     res.status(201).json({ success: true, message: 'Lead created successfully.', data: result.rows[0] });
   } catch (error) {
@@ -115,7 +115,7 @@ const updateLead = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { role, id: salesId } = req.user;
-    const { fullName, phone, email, address, requirements, status } = req.body;
+    const { fullName, phone, email, address, gender, requirements, status } = req.body;
 
     // Check ownership
     const ownerFilter = role === 'sales' ? 'AND sales_id = $2' : '';
@@ -132,12 +132,13 @@ const updateLead = async (req, res, next) => {
           phone = COALESCE($2, phone),
           email = COALESCE($3, email),
           address = COALESCE($4, address),
-          requirements = COALESCE($5, requirements),
-          status = COALESCE($6, status),
+          gender = COALESCE($5, gender),
+          requirements = COALESCE($6, requirements),
+          status = COALESCE($7, status),
           updated_at = NOW()
-      WHERE id = $7
+      WHERE id = $8
       RETURNING *
-    `, [fullName, phone, email, address, requirements, status, id]);
+    `, [fullName, phone, email, address, gender, requirements, status, id]);
 
     res.json({ success: true, message: 'Lead updated successfully.', data: result.rows[0] });
   } catch (error) {

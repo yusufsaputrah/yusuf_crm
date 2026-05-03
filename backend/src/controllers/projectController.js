@@ -224,11 +224,11 @@ const approveProject = async (req, res, next) => {
       const leadData = lead.rows[0];
 
       const customerResult = await client.query(`
-        INSERT INTO customers (full_name, phone, email, address, lead_id, sales_id, project_id)
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        INSERT INTO customers (full_name, phone, email, address, gender, lead_id, sales_id, project_id)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         ON CONFLICT DO NOTHING
         RETURNING *
-      `, [leadData.full_name, leadData.phone, leadData.email, leadData.address, leadData.id, project.sales_id, project.id]);
+      `, [leadData.full_name, leadData.phone, leadData.email, leadData.address, leadData.gender, leadData.id, project.sales_id, project.id]);
 
       if (customerResult.rows[0]) {
         const customerId = customerResult.rows[0].id;

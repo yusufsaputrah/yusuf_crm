@@ -21,7 +21,7 @@ const getAllCustomers = async (req, res, next) => {
 
     const result = await query(`
       SELECT
-        c.id, c.full_name, c.phone, c.email, c.address,
+        c.id, c.full_name, c.phone, c.email, c.address, c.gender,
         c.joined_at, c.is_active,
         u.full_name AS sales_name,
         COUNT(cs.id) AS service_count,

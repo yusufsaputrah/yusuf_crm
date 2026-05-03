@@ -78,7 +78,7 @@ const exportReportToExcel = async (req, res, next) => {
     const { startDate = '2000-01-01', endDate = new Date().toISOString().split('T')[0] } = req.query;
 
     const salesFilter = role === 'sales' ? `AND p.sales_id = $3` : '';
-    const params = role === 'sales' ? [dateStart, dateEnd, salesId] : [startDate, endDate];
+    const params = role === 'sales' ? [startDate, endDate, salesId] : [startDate, endDate];
 
     const projectsResult = await query(`
       SELECT
