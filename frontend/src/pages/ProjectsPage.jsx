@@ -1,8 +1,3 @@
-/**
- * @file ProjectsPage.jsx
- * @description Deal pipeline management. Fully responsive — mobile card layout.
- */
-
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -62,7 +57,7 @@ const ProjectForm = ({ onSubmit, isLoading }) => {
           required
         />
       </FormGroup>
-      {/* Stack on mobile, 2-col on sm+ */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <FormGroup label="Lead" required>
           <select value={leadId} onChange={(e) => setLeadId(e.target.value)} className="input" required>
@@ -82,7 +77,6 @@ const ProjectForm = ({ onSubmit, isLoading }) => {
         </FormGroup>
       </div>
 
-      {/* Product items */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <label className="label mb-0">Produk / Layanan *</label>
@@ -107,7 +101,7 @@ const ProjectForm = ({ onSubmit, isLoading }) => {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                {/* Produk full width */}
+
                 <select
                   value={item.productId}
                   onChange={(e) => updateItem(i, 'productId', e.target.value)}
@@ -121,7 +115,7 @@ const ProjectForm = ({ onSubmit, isLoading }) => {
                     </option>
                   ))}
                 </select>
-                {/* Qty + harga nego side by side */}
+
                 <div className="grid grid-cols-2 gap-2">
                   <input
                     type="number" min="1" value={item.quantity}
@@ -289,7 +283,7 @@ const ProjectsPage = () => {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
+
       <motion.div
         className="flex items-center justify-between gap-3 flex-wrap"
         initial={{ opacity: 0, y: -8 }}
@@ -316,7 +310,6 @@ const ProjectsPage = () => {
         </motion.button>
       </motion.div>
 
-      {/* Status Filter — horizontal scroll on mobile */}
       <motion.div
         className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide"
         initial={{ opacity: 0 }}
@@ -348,7 +341,6 @@ const ProjectsPage = () => {
         })}
       </motion.div>
 
-      {/* Projects List */}
       <div className="space-y-3">
         {projects.length === 0 ? (
           <div className="card">
@@ -365,15 +357,14 @@ const ProjectsPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
               >
-                {/* Project header */}
+
                 <div className="p-4">
                   <div className="flex items-start gap-3">
-                    {/* Icon */}
+
                     <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center p-1.5 border border-slate-100 flex-shrink-0 mt-0.5 shadow-sm">
                       <img src={customerIconUrl} alt="Deal" className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
 
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-1.5 mb-1">
                         <h3 className="font-bold text-slate-900 text-sm">{proj.project_name}</h3>
@@ -391,7 +382,6 @@ const ProjectsPage = () => {
                     </div>
                   </div>
 
-                  {/* Value + actions row */}
                   <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-50">
                     <span className="text-base font-bold text-slate-900">
                       {formatRupiah(proj.total_value)}
@@ -420,7 +410,6 @@ const ProjectsPage = () => {
                   </div>
                 </div>
 
-                {/* Expandable detail */}
                 <AnimatePresence initial={false}>
                   {isExpanded && (
                     <motion.div
@@ -452,7 +441,6 @@ const ProjectsPage = () => {
         )}
       </div>
 
-      {/* Modals */}
       <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} title="Buat Project Baru" size="xl">
         <ProjectForm onSubmit={(d) => createMutation.mutate(d)} isLoading={createMutation.isPending} />
       </Modal>

@@ -1,5 +1,3 @@
-// Authenticated layout — sidebar + animated content + mobile hamburger topbar.
-
 import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,16 +29,14 @@ const MainLayout = () => {
   return (
     <div className="flex min-h-screen bg-slate-50">
 
-      {/* ── Desktop sidebar (selalu tampil di lg+) ── */}
       <div className="hidden lg:block">
         <Sidebar />
       </div>
 
-      {/* ── Mobile: drawer sidebar ── */}
       <AnimatePresence>
         {sidebarOpen && (
           <>
-            {/* Backdrop */}
+
             <motion.div
               className="fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-sm lg:hidden"
               initial={{ opacity: 0 }}
@@ -50,7 +46,6 @@ const MainLayout = () => {
               onClick={() => setSidebarOpen(false)}
             />
 
-            {/* Sidebar drawer */}
             <motion.div
               className="fixed inset-y-0 left-0 z-50 lg:hidden"
               initial={{ x: '-100%' }}
@@ -64,10 +59,8 @@ const MainLayout = () => {
         )}
       </AnimatePresence>
 
-      {/* ── Main content ── */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
-        {/* Mobile topbar */}
         <div className="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-slate-100 shadow-sm sticky top-0 z-30">
           <button
             onClick={() => setSidebarOpen(true)}
@@ -84,11 +77,10 @@ const MainLayout = () => {
             </div>
             <span className="font-bold text-slate-800 text-sm">Smart CRM</span>
           </div>
-          {/* Placeholder kanan agar judul center */}
+
           <div className="w-10" />
         </div>
 
-        {/* Page content */}
         <main className="flex-1 overflow-auto">
           <AnimatePresence mode="wait">
             <motion.div

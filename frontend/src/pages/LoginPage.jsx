@@ -89,7 +89,6 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex flex-row overflow-hidden">
 
-      {/* LEFT PANEL — foto + ikon animasi (lg ke atas) */}
       <motion.aside
         aria-hidden="true"
         className="hidden lg:flex flex-col items-center justify-center w-[56%] xl:w-[60%] relative overflow-hidden shrink-0"
@@ -102,7 +101,6 @@ const LoginPage = () => {
 
         {ICONS.map((cfg, i) => <FloatingIcon key={i} {...cfg} />)}
 
-        {/* Orbiting rings */}
         <motion.div
           className="absolute w-72 h-72 rounded-full border border-sky-400/20 pointer-events-none"
           animate={{ rotate: 360 }}
@@ -118,7 +116,6 @@ const LoginPage = () => {
           <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-sky-300 shadow-[0_0_6px_#7dd3fc]" />
         </motion.div>
 
-        {/* Brand badge */}
         <div className="absolute top-7 left-7 z-20 flex items-center gap-2.5">
           <motion.div
             className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20"
@@ -130,54 +127,11 @@ const LoginPage = () => {
           <span className="text-white font-bold text-sm tracking-widest uppercase drop-shadow">Smart CRM</span>
         </div>
 
-        {/* Hero text — dinonaktifkan sementara
-        <motion.div
-          className="relative z-20 mx-10 max-w-sm"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.65 }}
-        >
-          <div
-            className="rounded-2xl px-8 py-7 text-center"
-            style={{
-              background: 'rgba(2, 14, 36, 0.48)',
-              backdropFilter: 'blur(14px)',
-              WebkitBackdropFilter: 'blur(14px)',
-              border: '1px solid rgba(255,255,255,0.15)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.28)',
-            }}
-          >
-            <h2 className="text-white text-2xl xl:text-3xl font-extrabold leading-snug drop-shadow">
-              Kelola Pelanggan ISP<br />
-              <span className="text-sky-300">dengan Mudah</span>
-            </h2>
-            <div className="mx-auto mt-4 mb-4 h-px w-16 bg-sky-400/50 rounded-full" />
-            <p className="text-sky-100/80 text-sm leading-relaxed">
-              Platform CRM terpadu untuk tim sales,<br />
-              manager, dan customer Anda.
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 mt-5">
-              {['Lead Management', 'Deal Pipeline', 'Laporan Real-time'].map((f) => (
-                <span
-                  key={f}
-                  className="px-3 py-1.5 text-white text-xs font-medium rounded-full border border-white/25 hover:bg-white/20 transition-colors"
-                  style={{ background: 'rgba(255,255,255,0.10)' }}
-                >
-                  {f}
-                </span>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-        */}
-
         <div className="absolute bottom-0 inset-x-0 h-20 bg-gradient-to-t from-slate-950/50 to-transparent pointer-events-none" />
       </motion.aside>
 
-      {/* RIGHT PANEL — form login */}
       <div className="flex-1 flex items-center justify-center relative min-h-screen lg:min-h-0 lg:bg-slate-50 px-4 py-10 sm:px-8">
 
-        {/* Mobile background */}
         <div className="absolute inset-0 bg-cover bg-center lg:hidden" style={bgStyle} />
         <div
           className="absolute inset-0 lg:hidden"
@@ -190,7 +144,7 @@ const LoginPage = () => {
           initial="hidden"
           animate="visible"
         >
-          {/* Logo */}
+
           <motion.div variants={formItem} className="flex items-center gap-2.5 mb-8">
             <div className="w-8 h-8 bg-sky-500 rounded-lg flex items-center justify-center shadow-md">
               <Wifi size={15} className="text-white" />
@@ -198,7 +152,6 @@ const LoginPage = () => {
             <span className="font-bold text-sm lg:text-slate-800 text-white">Smart CRM</span>
           </motion.div>
 
-          {/* Heading */}
           <motion.div variants={formItem} className="mb-8">
             <h1 className="text-2xl font-bold tracking-tight lg:text-slate-900 text-white">
               Selamat Datang Kembali
@@ -210,7 +163,6 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
 
-            {/* Email */}
             <motion.div variants={formItem}>
               <label className="label lg:text-slate-500 text-sky-300">Email</label>
               <div className="relative">
@@ -234,7 +186,6 @@ const LoginPage = () => {
               </div>
             </motion.div>
 
-            {/* Password */}
             <motion.div variants={formItem}>
               <label className="label lg:text-slate-500 text-sky-300">Password</label>
               <div className="relative">
@@ -277,7 +228,6 @@ const LoginPage = () => {
               </div>
             </motion.div>
 
-            {/* Submit */}
             <motion.div variants={formItem} className="pt-1">
               <motion.button
                 id="login-submit"
@@ -316,7 +266,6 @@ const LoginPage = () => {
         </motion.div>
       </div>
 
-      {/* Success Modal */}
       <AnimatePresence>
         {showSuccessModal && (
           <motion.div
@@ -331,7 +280,7 @@ const LoginPage = () => {
               animate={{ scale: 1, opacity: 1, y: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             >
-              {/* Glow background */}
+
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-sky-100 blur-3xl rounded-full opacity-60" />
               
               <motion.div 
@@ -345,8 +294,7 @@ const LoginPage = () => {
               
               <h2 className="text-2xl font-bold text-slate-900 mb-2 relative z-10 tracking-tight">Login Berhasil!</h2>
               <p className="text-slate-500 text-sm relative z-10 mb-2">Selamat datang kembali di Smart CRM.</p>
-              
-              {/* Loading dots */}
+
               <div className="mt-4 flex gap-1.5 relative z-10 items-center h-4">
                 <motion.div className="w-2 h-2 rounded-full bg-sky-500" animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0 }} />
                 <motion.div className="w-2 h-2 rounded-full bg-sky-500" animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.15 }} />
@@ -357,7 +305,6 @@ const LoginPage = () => {
         )}
       </AnimatePresence>
 
-      {/* Error Modal */}
       <AnimatePresence>
         {showErrorModal && (
           <motion.div
@@ -373,7 +320,7 @@ const LoginPage = () => {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
             >
-              {/* Glow background merah */}
+
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-red-100 blur-3xl rounded-full opacity-60" />
               
               <motion.div 

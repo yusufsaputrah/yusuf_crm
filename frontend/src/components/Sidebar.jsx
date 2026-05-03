@@ -1,5 +1,3 @@
-// Main navigation sidebar — sky-blue palette + logout confirmation popup + mobile support.
-
 import { useState } from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -62,7 +60,7 @@ const Sidebar = ({ isMobile = false, onClose }) => {
         animate="visible"
         className="w-64 min-h-screen bg-white flex flex-col flex-shrink-0 border-r border-slate-100"
       >
-        {/* Brand */}
+
         <div className="px-5 py-5 border-b border-slate-100">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -74,7 +72,7 @@ const Sidebar = ({ isMobile = false, onClose }) => {
                 <p className="text-slate-400 text-xs font-medium">PT. Smart ISP</p>
               </div>
             </div>
-            {/* Tombol close hanya di mobile */}
+
             {isMobile && (
               <button
                 onClick={onClose}
@@ -87,7 +85,6 @@ const Sidebar = ({ isMobile = false, onClose }) => {
           </div>
         </div>
 
-        {/* User Info */}
         <div className="px-4 py-4 border-b border-slate-100">
           <div className="flex items-center gap-3 p-2 rounded-xl bg-sky-50">
             <div className="w-9 h-9 bg-sky-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
@@ -104,7 +101,6 @@ const Sidebar = ({ isMobile = false, onClose }) => {
           </div>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           <p className="px-3 mb-2 text-[10px] font-semibold text-slate-400 uppercase tracking-widest">
             Menu
@@ -152,7 +148,6 @@ const Sidebar = ({ isMobile = false, onClose }) => {
           })}
         </nav>
 
-        {/* Logout */}
         <div className="px-3 py-4 border-t border-slate-100">
           <motion.button
             onClick={() => setShowLogoutDialog(true)}

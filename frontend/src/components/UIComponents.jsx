@@ -1,8 +1,3 @@
-/**
- * @file UIComponents.jsx
- * @description Shared reusable UI primitives powered by HeroUI + Framer Motion.
- */
-
 import { X, AlertTriangle, Inbox, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -27,7 +22,7 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
         >
-          {/* Backdrop */}
+
           <motion.div
             className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
             onClick={onClose}
@@ -36,7 +31,6 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
             exit={{ opacity: 0 }}
           />
 
-          {/* Panel */}
           <motion.div
             className={`relative bg-white rounded-2xl shadow-2xl w-full ${maxW} max-h-[90vh] overflow-y-auto`}
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
@@ -44,7 +38,7 @@ export const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 380, damping: 30 }}
           >
-            {/* Header */}
+
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
               <h2 className="text-base font-semibold text-slate-900">{title}</h2>
               <button
@@ -110,7 +104,7 @@ export const ConfirmDialog = ({
   message,
   confirmLabel = 'Hapus',
   isLoading,
-  variant = 'danger', // 'danger' | 'warning'
+  variant = 'danger', 
 }) => (
   <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
     <div className="flex gap-4 mb-6">
@@ -160,11 +154,11 @@ export const LogoutConfirmDialog = ({ isOpen, onClose, onConfirm }) => (
           exit={{ opacity: 0, scale: 0.9, y: 10 }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         >
-          {/* Decorative top bar */}
+
           <div className="h-1 w-full bg-gradient-to-r from-indigo-500 via-violet-500 to-pink-500" />
 
           <div className="p-6">
-            {/* Icon */}
+
             <motion.div
               className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4"
               initial={{ scale: 0 }}

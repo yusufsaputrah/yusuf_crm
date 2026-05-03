@@ -1,9 +1,3 @@
-/**
- * @file ReportsPage.jsx
- * @description Halaman Laporan — pipeline analytics ISP dengan custom chart,
- * revenue summary, conversion funnel, dan ranked project list.
- */
-
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -56,7 +50,7 @@ const FunnelBar = ({ label, count, total, color, bg, Icon, delay }) => {
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay, duration: 0.4 }}
     >
-      {/* Icon bubble */}
+
       <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: bg }}>
         <Icon size={14} style={{ color }} />
       </div>
@@ -96,7 +90,7 @@ const KpiTile = ({ label, value, sub, icon: Icon, accentBg, accentText, accentBa
     transition={{ delay, type: 'spring', stiffness: 300, damping: 28 }}
     whileHover={{ y: -2 }}
   >
-    {/* Accent bar top */}
+
     <div className={`absolute top-0 left-0 right-0 h-0.5 ${accentBar}`} />
     <div className="flex items-start justify-between gap-3">
       <div className="flex-1 min-w-0 pt-1">
@@ -196,21 +190,17 @@ const ReportsPage = () => {
     ...(STATUS_CONFIG[s.status] || { color: '#94a3b8', bg: '#f1f5f9', icon: Layers }),
   }));
 
-  // Sort projects by value for ranking
   const rankedProjects = [...(reportData?.projects || [])].sort(
     (a, b) => Number(b.total_value) - Number(a.total_value)
   );
 
-  // Build area chart data from lead statuses (simulate monthly breakdown as status bars)
   const areaData = funnelData.map(f => ({ name: f.label, lead: f.count }));
 
-  // Period label
   const formatPeriod = (d) => new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 
   return (
     <div className="space-y-5">
 
-      {/* ── Header ── */}
       <motion.div
         className="flex items-center justify-between gap-3 flex-wrap mb-4"
         initial={{ opacity: 0, y: -8 }}
@@ -240,7 +230,6 @@ const ReportsPage = () => {
         </motion.button>
       </motion.div>
 
-      {/* ── Period filter strip ── */}
       <motion.div
         className="card p-4"
         initial={{ opacity: 0, y: 8 }}
@@ -287,7 +276,6 @@ const ReportsPage = () => {
         </div>
       </motion.div>
 
-      {/* ── KPI Tiles ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <KpiTile
           label="Total Revenue"
@@ -331,10 +319,8 @@ const ReportsPage = () => {
         />
       </div>
 
-      {/* ── Charts Row ── */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
 
-        {/* Lead Funnel (col 2) */}
         <motion.div
           className="card p-5 lg:col-span-2"
           initial={{ opacity: 0, y: 12 }}
@@ -368,7 +354,6 @@ const ReportsPage = () => {
           )}
         </motion.div>
 
-        {/* Area chart — distribusi lead per status (col 3) */}
         <motion.div
           className="card p-5 lg:col-span-3"
           initial={{ opacity: 0, y: 12 }}
@@ -430,7 +415,6 @@ const ReportsPage = () => {
         </motion.div>
       </div>
 
-      {/* ── Project Ranking ── */}
       <motion.div
         className="card p-5"
         initial={{ opacity: 0, y: 12 }}
@@ -456,7 +440,7 @@ const ReportsPage = () => {
           </div>
         ) : (
           <>
-            {/* Top 3 podium — hanya desktop */}
+
             {rankedProjects.length >= 3 && (
               <div className="hidden sm:grid grid-cols-3 gap-3 mb-5">
                 {[1, 0, 2].map((rankIdx) => {
@@ -467,8 +451,8 @@ const ReportsPage = () => {
                     { h: 'h-24', bg: 'bg-amber-50', border: 'border-amber-300', text: 'text-amber-700', label: '🏆 #2 → #1' },
                     { h: 'h-10', bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-600', label: '🥉 #3' },
                   ];
-                  // reorder: middle is rank 1
-                  const podiumOrder = [1, 0, 2]; // display: 2nd, 1st, 3rd
+
+                  const podiumOrder = [1, 0, 2]; 
                   const displayRank = podiumOrder[rankIdx] + 1;
                   const realProj = rankedProjects[podiumOrder[rankIdx]];
                   const podiumLabels = ['🥈 2nd', '🥇 1st', '🥉 3rd'];
@@ -492,7 +476,6 @@ const ReportsPage = () => {
               </div>
             )}
 
-            {/* Full ranked list */}
             <div className="divide-y divide-slate-50 max-h-64 overflow-y-auto scrollbar-hide">
               {rankedProjects.map((proj, idx) => (
                 <ProjectRow key={proj.id} proj={proj} rank={idx + 1} idx={idx} />
@@ -502,7 +485,6 @@ const ReportsPage = () => {
         )}
       </motion.div>
 
-      {/* ── Revenue summary footer ── */}
       {reportData?.totalRevenue > 0 && (
         <motion.div
           className="bg-sky-500 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"

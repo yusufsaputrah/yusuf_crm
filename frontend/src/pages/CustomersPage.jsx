@@ -1,6 +1,3 @@
-// Displays active customers and their subscribed services.
-// Redesigned with Framer Motion expand/collapse animations.
-
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Search, ChevronDown, Phone, Mail, Users, Wallet, User } from 'lucide-react';
@@ -12,7 +9,6 @@ import { PageLoader, EmptyState } from '../components/UIComponents';
 const manIconUrl = new URL('../assets/icons/bussiness-man.png', import.meta.url).href;
 const womanIconUrl = new URL('../assets/icons/businesswoman.png', import.meta.url).href;
 
-// Customer Services Detail
 const CustomerDetail = ({ customerId }) => {
   const { data, isLoading } = useQuery({
     queryKey: ['customer-detail', customerId],
@@ -59,7 +55,7 @@ const CustomerDetail = ({ customerId }) => {
                     </div>
                   </motion.div>
                 ))}
-                {/* Total */}
+
                 <div className="flex justify-between items-center pt-2 border-t border-slate-200 mt-1">
                   <span className="text-xs font-bold text-slate-600">Total Bulanan</span>
                   <span className="text-sm font-bold text-slate-900">
@@ -101,7 +97,7 @@ const CustomersPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+
       <motion.div
         className="flex items-center justify-between gap-3 flex-wrap mb-6"
         initial={{ opacity: 0, y: -8 }}
@@ -128,7 +124,6 @@ const CustomersPage = () => {
         </div>
       </motion.div>
 
-      {/* Search */}
       <motion.div
         className="relative max-w-sm"
         initial={{ opacity: 0 }}
@@ -144,7 +139,6 @@ const CustomersPage = () => {
         />
       </motion.div>
 
-      {/* Customer List */}
       <motion.div
         className="card overflow-hidden"
         initial={{ opacity: 0, y: 12 }}
@@ -167,14 +161,14 @@ const CustomersPage = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: idx * 0.04 }}
                 >
-                  {/* Customer row */}
+
                   <div
                     className={`flex items-center gap-3 p-4 cursor-pointer transition-colors duration-150 ${
                       isExpanded ? 'bg-sky-50/60' : 'hover:bg-slate-50'
                     }`}
                     onClick={() => setExpandedId(isExpanded ? null : customer.id)}
                   >
-                    {/* Avatar */}
+
                     <div className="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center flex-shrink-0 p-1.5 border border-violet-100">
                       <img 
                         src={customer.gender === 'wanita' ? womanIconUrl : manIconUrl} 
@@ -183,10 +177,9 @@ const CustomersPage = () => {
                       />
                     </div>
 
-                    {/* Info */}
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-slate-900 text-sm truncate">{customer.full_name}</p>
-                      {/* Show value on mobile below name */}
+
                       <p className="text-xs font-bold text-sky-600 sm:hidden">
                         {formatRupiah(customer.monthly_value)}/bln
                       </p>
@@ -209,7 +202,6 @@ const CustomersPage = () => {
                       </div>
                     </div>
 
-                    {/* Right side */}
                     <div className="flex items-center gap-3 flex-shrink-0">
                       <div className="text-right hidden sm:block">
                         <p className="text-xs text-slate-400">{customer.service_count} layanan</p>
@@ -230,7 +222,6 @@ const CustomersPage = () => {
                     </div>
                   </div>
 
-                  {/* Expandable detail */}
                   <AnimatePresence initial={false}>
                     {isExpanded && <CustomerDetail customerId={customer.id} />}
                   </AnimatePresence>

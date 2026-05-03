@@ -1,13 +1,3 @@
-/**
- * @file formatUtils.js
- * @description Utility functions for formatting currency, dates, and numbers.
- */
-
-/**
- * Format a number as Indonesian Rupiah.
- * @param {number|string} amount
- * @returns {string} e.g. "Rp 1.500.000"
- */
 export const formatRupiah = (amount) => {
   if (amount === null || amount === undefined || isNaN(Number(amount))) return 'Rp 0';
   return new Intl.NumberFormat('id-ID', {
@@ -18,11 +8,6 @@ export const formatRupiah = (amount) => {
   }).format(Number(amount));
 };
 
-/**
- * Format ISO date string to localized Indonesian date.
- * @param {string} dateString
- * @returns {string} e.g. "15 Jan 2024"
- */
 export const formatDate = (dateString) => {
   if (!dateString) return '-';
   return new Intl.DateTimeFormat('id-ID', {
@@ -32,11 +17,6 @@ export const formatDate = (dateString) => {
   }).format(new Date(dateString));
 };
 
-/**
- * Format ISO date string to relative time (e.g. "3 hari lalu").
- * @param {string} dateString
- * @returns {string}
- */
 export const formatRelativeTime = (dateString) => {
   if (!dateString) return '-';
   const diff = Date.now() - new Date(dateString).getTime();
@@ -48,11 +28,6 @@ export const formatRelativeTime = (dateString) => {
   return `${Math.floor(days / 365)} tahun lalu`;
 };
 
-/**
- * Truncate string to max length.
- * @param {string} str
- * @param {number} maxLength
- */
 export const truncate = (str, maxLength = 40) => {
   if (!str) return '-';
   return str.length > maxLength ? str.slice(0, maxLength) + '…' : str;

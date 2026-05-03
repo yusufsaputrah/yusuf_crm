@@ -1,8 +1,3 @@
-/**
- * @file App.jsx
- * @description Root application component. Configures routes and auth provider.
- */
-
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -18,10 +13,9 @@ import ReportsPage from './pages/ReportsPage';
 const App = () => (
   <AuthProvider>
     <Routes>
-      {/* Public route */}
+
       <Route path="/login" element={<LoginPage />} />
 
-      {/* Protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<MainLayout />}>
           <Route path="/dashboard"  element={<DashboardPage />} />
@@ -33,7 +27,6 @@ const App = () => (
         </Route>
       </Route>
 
-      {/* Fallback */}
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   </AuthProvider>

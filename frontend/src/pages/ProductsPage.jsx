@@ -1,6 +1,3 @@
-// Master product management. Sales can view; Manager can CRUD.
-// Redesigned with HeroUI + Framer Motion.
-
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Edit2, Trash2, Package, Tag, Percent } from 'lucide-react';
@@ -110,7 +107,7 @@ const ProductsPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+
       <motion.div
         className="flex items-center justify-between gap-3 flex-wrap mb-6"
         initial={{ opacity: 0, y: -8 }}
@@ -138,7 +135,6 @@ const ProductsPage = () => {
         )}
       </motion.div>
 
-      {/* Product Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {products.length === 0 ? (
           <div className="col-span-3">
@@ -155,7 +151,7 @@ const ProductsPage = () => {
               animate="visible"
               whileHover={{ y: -2 }}
             >
-              {/* Card header */}
+
               <div className="flex items-start justify-between mb-4">
                 <div className="w-11 h-11 bg-violet-50 rounded-xl flex items-center justify-center p-1.5 border border-violet-100 shadow-sm">
                   <img src={routerIconUrl} alt="Router" className="w-full h-full object-contain drop-shadow-sm" />
@@ -183,7 +179,6 @@ const ProductsPage = () => {
                 <p className="text-xs text-slate-400 mb-4 leading-relaxed">{product.description}</p>
               )}
 
-              {/* Pricing breakdown */}
               <div className="space-y-2 border-t border-slate-100 pt-3 mt-auto">
                 <div className="flex justify-between items-center text-xs">
                   <span className="flex items-center gap-1.5 text-slate-500">
@@ -207,7 +202,6 @@ const ProductsPage = () => {
         )}
       </div>
 
-      {/* Modals */}
       <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} title="Tambah Produk Baru" size="md">
         <ProductForm onSubmit={(d) => createMutation.mutate(d)} isLoading={createMutation.isPending} />
       </Modal>

@@ -1,6 +1,3 @@
-// Full CRUD management for leads.
-// Mobile: card list view. Desktop: table view.
-
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Edit2, Trash2, Phone, Mail, MapPin, Filter, User, Users } from 'lucide-react';
@@ -33,7 +30,7 @@ const LeadForm = ({ initialData, onSubmit, isLoading }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {/* stack on mobile, 2-col on sm+ */}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <FormGroup label="Nama Lengkap" required>
           <input name="fullName" value={form.fullName} onChange={handleChange} className="input" placeholder="John Doe" required />
@@ -183,7 +180,7 @@ const LeadsPage = () => {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
+
       <motion.div
         className="flex items-center justify-between gap-3 flex-wrap"
         initial={{ opacity: 0, y: -8 }}
@@ -211,7 +208,6 @@ const LeadsPage = () => {
         </motion.button>
       </motion.div>
 
-      {/* Filters */}
       <motion.div
         className="flex flex-col sm:flex-row gap-2"
         initial={{ opacity: 0 }}
@@ -242,7 +238,6 @@ const LeadsPage = () => {
         </div>
       </motion.div>
 
-      {/* Mobile: Card List */}
       <div className="block lg:hidden space-y-3">
         {leads.length === 0 ? (
           <div className="card">
@@ -261,7 +256,6 @@ const LeadsPage = () => {
         )}
       </div>
 
-      {/* Desktop: Table */}
       <motion.div
         className="hidden lg:block card overflow-hidden"
         initial={{ opacity: 0, y: 12 }}
@@ -357,7 +351,6 @@ const LeadsPage = () => {
         </div>
       </motion.div>
 
-      {/* Modals */}
       <Modal isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} title="Tambah Lead Baru" size="lg">
         <LeadForm onSubmit={(data) => createMutation.mutate(data)} isLoading={createMutation.isPending} />
       </Modal>

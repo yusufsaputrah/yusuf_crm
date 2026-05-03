@@ -1,5 +1,3 @@
-// Guards authenticated routes. Redirects to /login if not authenticated.
-
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 

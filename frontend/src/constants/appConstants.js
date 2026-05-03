@@ -1,5 +1,3 @@
-// Application-wide constants: status labels, badge colors, role definitions.
-
 export const LEAD_STATUSES = {
   new:       { label: 'Baru',      color: 'bg-blue-100 text-blue-700' },
   contacted: { label: 'Dihubungi', color: 'bg-yellow-100 text-yellow-700' },

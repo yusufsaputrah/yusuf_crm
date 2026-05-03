@@ -1,9 +1,3 @@
-/**
- * @file DashboardPage.jsx
- * @description Full CRM dashboard — KPI, pipeline kanban, recent leads,
- * customer MRR, lead distribution donut, dan quick actions.
- */
-
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -109,7 +103,6 @@ const DashboardPage = () => {
 
   if (isLoading) return <PageLoader />;
 
-  /* derived */
   const totalLeads = reportData?.leadsByStatus?.reduce((a, s) => a + parseInt(s.count), 0) || 0;
   const pieData = (reportData?.leadsByStatus || []).map(s => {
     const pct = totalLeads > 0 ? Math.round((parseInt(s.count) / totalLeads) * 100) : 0;
@@ -127,7 +120,6 @@ const DashboardPage = () => {
     ? Math.round(((reportData?.leadsByStatus?.find(s => s.status === 'converted')?.count || 0) / totalLeads) * 100)
     : 0;
 
-  // Pipeline counts per status
   const pipelineCounts = Object.keys(PIPELINE_CONFIG).reduce((acc, key) => {
     acc[key] = allProjects.filter(p => p.status === key).length;
     return acc;
@@ -150,7 +142,6 @@ const DashboardPage = () => {
   return (
     <div className="space-y-5">
 
-      {/* ── Header ── */}
       <motion.div className="flex items-center justify-between flex-wrap gap-3"
         initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
         <div>
@@ -167,7 +158,6 @@ const DashboardPage = () => {
         </div>
       </motion.div>
 
-      {/* ── Quick Actions ── */}
       <motion.div className="grid grid-cols-2 sm:grid-cols-4 gap-3"
         initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}>
         {quickActions.map((a, i) => (
@@ -189,7 +179,6 @@ const DashboardPage = () => {
         ))}
       </motion.div>
 
-      {/* ── KPI Cards ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {kpis.map((k, i) => (
           <motion.div key={i}
@@ -201,7 +190,6 @@ const DashboardPage = () => {
         ))}
       </div>
 
-      {/* ── Pipeline Kanban Summary ── */}
       <motion.div className="card p-5"
         initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
         <div className="flex items-center justify-between mb-4">
@@ -246,10 +234,8 @@ const DashboardPage = () => {
         </div>
       </motion.div>
 
-      {/* ── Bottom Row: Donut + Recent Leads + Recent Customers ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
 
-        {/* Lead Donut */}
         <motion.div className="card p-5"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}>
           <div className="flex items-center justify-between mb-4">
@@ -297,7 +283,6 @@ const DashboardPage = () => {
           )}
         </motion.div>
 
-        {/* Recent Leads */}
         <motion.div className="card p-5"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.42 }}>
           <div className="flex items-center justify-between mb-4">
@@ -346,11 +331,9 @@ const DashboardPage = () => {
           )}
         </motion.div>
 
-        {/* Active Customers + Pending projects */}
         <motion.div className="card p-5 flex flex-col gap-4"
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.46 }}>
 
-          {/* Customer MRR mini */}
           <div>
             <div className="flex items-center justify-between mb-3">
               <div>
@@ -385,7 +368,6 @@ const DashboardPage = () => {
             )}
           </div>
 
-          {/* Pending approval alert */}
           {pendingProjects.length > 0 && (
             <motion.div
               className="mt-auto p-3 bg-amber-50 border border-amber-100 rounded-xl"
@@ -409,7 +391,6 @@ const DashboardPage = () => {
             </motion.div>
           )}
 
-          {/* Approved projects mini */}
           {reportData?.projects?.length > 0 && pendingProjects.length === 0 && (
             <div className="mt-auto">
               <div className="flex items-center justify-between mb-2">
