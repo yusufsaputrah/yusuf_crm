@@ -1,0 +1,64 @@
+# ============================================================
+# Smart CRM – Docker Compose
+# ============================================================
+# Usage:
+#   1. Copy backend/.env.example -> backend/.env  (fill values)
+#   2. Copy frontend/.env.example -> frontend/.env (fill values)
+#   3. docker-compose up --build
+# ============================================================
+
+version: "3.9"
+
+services:
+  # ── PostgreSQL Database ─────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: smart_crm_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-smart_crm}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend API ─────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: smart_crm_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_HOST: db
+      NODE_ENV: production
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Frontend (React + Nginx) ────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: smart_crm_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local
