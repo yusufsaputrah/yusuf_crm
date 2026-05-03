@@ -188,35 +188,32 @@ docker-compose exec backend node src/database/seed.js
 
 ## 📦 Panduan Deploy ke Cloud (Production)
 
-Arsitektur aplikasi ini terdiri dari Frontend SPA (React/Vite) dan Backend REST API (Express.js). Berikut adalah rekomendasi infrastruktur gratis untuk *technical test*:
+Arsitektur aplikasi ini terdiri dari Frontend SPA (React/Vite) dan Backend REST API (Express.js). Berikut adalah dokumentasi deployment menggunakan Vercel dan Railway:
 
-### 1. Deploy Frontend (Vercel)
-Vercel sangat optimal untuk aplikasi SPA statis seperti React/Vite.
-1. Push repositori ini ke GitHub.
-2. Login ke [Vercel](https://vercel.com/) dan buat project baru dari repository GitHub Anda.
-3. Vercel akan otomatis mendeteksi framework (Vite).
-4. Pada menu **Environment Variables**, tambahkan:
-   - `VITE_API_BASE_URL` = `https://<URL_BACKEND_ANDA>/api`
-5. Klik **Deploy**.
+### 1. Deploy Database & Backend (Railway)
+1. Buat akun di [Railway.app](https://railway.app/).
+2. Buat project baru dan pilih **Provision PostgreSQL** untuk membuat database.
+3. Deploy Backend: Klik **New -> GitHub Repo** dan pilih repositori ini.
+4. Masuk ke **Settings** service Backend:
+   - Root Directory: `backend`
+   - Build Command: `npm install`
+   - Start Command: `node src/server.js`
+5. Masuk ke **Variables** service Backend:
+   - Tambahkan `DATABASE_URL` (pilih opsi *Reference* ke PostgreSQL)
+   - Tambahkan `PORT` = `5001`
+   - Tambahkan `NODE_ENV` = `production`
+   - Tambahkan `JWT_SECRET` = *(Password rahasia Anda)*
+   - Tambahkan `FRONTEND_URL` = `https://<URL_VERCEL_ANDA>.vercel.app` (Sangat penting untuk mengatasi CORS)
+6. Jalankan migrasi dan seed database secara lokal dengan memasukkan `DATABASE_URL` publik Railway ke `.env` Anda, lalu jalankan: `npm run migrate && npm run seed`.
 
-### 2. Deploy Database (Render / Neon)
-1. Buat layanan **PostgreSQL** gratis di [Render.com](https://render.com) atau [Neon.tech](https://neon.tech).
-2. Simpan kredensial Database URL (Host, User, Password).
-
-### 3. Deploy Backend (Render)
-Backend Express.js membutuhkan layanan *long-running server*.
-1. Di Dashboard Render, klik **New > Web Service**.
-2. Hubungkan ke repositori GitHub Anda (Pilih *Root Directory*: `backend`).
-3. Set **Build Command**: `npm install` dan **Start Command**: `node src/server.js`.
-4. Masukkan **Environment Variables**:
-   - `NODE_ENV` = `production`
-   - `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` = *(Isi dari Langkah 2)*
-   - `JWT_SECRET` = *(Password rahasia Anda)*
-   - `FRONTEND_URL` = `https://<URL_VERCEL_ANDA>.vercel.app` (Penting untuk CORS).
-5. Klik **Deploy**.
-6. Setelah Backend online, masuk ke **Shell** Render dan jalankan:
-   - `npm run migrate` (Membuat tabel)
-   - `npm run seed` (Mengisi akun default)
+### 2. Deploy Frontend (Vercel)
+1. Login ke [Vercel](https://vercel.com/) dan buat project baru dari repository GitHub Anda.
+2. Pada pengaturan awal (Configure Project):
+   - **Root Directory**: Wajib diubah menjadi `frontend`.
+   - **Framework Preset**: Vite (otomatis terdeteksi).
+3. Pada menu **Environment Variables**, tambahkan:
+   - `VITE_API_BASE_URL` = `https://<URL_BACKEND_RAILWAY_ANDA>/api`
+4. Klik **Deploy**.
 
 ---
 

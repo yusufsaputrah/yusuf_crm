@@ -4,16 +4,17 @@ Aplikasi CRM (Customer Relationship Management) sederhana untuk PT. Smart, sebua
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Fitur Utama & Pembaruan Terkini
 
 | Fitur | Deskripsi |
 |---|---|
-| **Login & Autentikasi** | JWT-based auth, session disimpan di localStorage |
-| **Manajemen Lead** | CRUD lead dengan status tracking (new → converted) |
-| **Master Produk** | CRUD produk dengan HPP, margin, dan harga jual otomatis |
-| **Deal Pipeline** | Buat project multi-produk, harga negosiasi, approval workflow |
-| **Customer Aktif** | Tampilkan customer berlangganan beserta layanannya |
-| **Laporan** | Ringkasan per periode + export Excel |
+| **Login & Autentikasi** | JWT auth dengan pembersihan memori (*cache clear*) otomatis antar akun |
+| **Manajemen Lead** | CRUD lead lengkap dengan data *Gender* (Pria/Wanita) dan status tracking |
+| **Master Produk** | CRUD produk dengan perhitungan margin & harga jual otomatis (*Generated Column*) |
+| **Deal Pipeline** | Flow konversi lead ke customer, multi-produk, dan *auto-flagging* approval manager |
+| **Customer Aktif** | Tampilkan customer berlangganan dengan avatar khusus gender dan perhitungan MRR |
+| **Laporan & Export** | Dashboard analitik dan fitur Download Laporan Excel yang berjalan lancar |
+| **UI/UX Modern** | Tampilan *Sky Blue* modern menggunakan Tailwind, animasi Framer Motion & Ikon |
 
 ---
 
@@ -29,28 +30,46 @@ Aplikasi CRM (Customer Relationship Management) sederhana untuk PT. Smart, sebua
 
 ---
 
-## 🏗 Arsitektur & Struktur Project (Modular Architecture)
-
-Aplikasi Frontend dibangun dengan prinsip **Separation of Concerns (Modular Architecture)**. Pemisahan dilakukan berdasarkan layer dan fungsinya sehingga memenuhi standar industri yang *Clean* dan *Maintainable*:
+## 🏗 Arsitektur & Struktur Project
 
 ```
-frontend/
-├── Dockerfile                  # Konfigurasi image Docker frontend
-├── docker-compose.yml          # Konfigurasi containerisasi frontend
-├── vite.config.js              # Build tool config
-├── src/
-│   ├── components/             # Reusable UI Primitives (Modal, Badge, Layout)
-│   │   └── UIComponents.jsx
-│   ├── constants/              # Data konstan & Endpoint configuration
-│   │   └── appConstants.js
-│   ├── context/                # Global State Management (AuthContext)
-│   ├── pages/                  # Halaman utama aplikasi (View Layer)
-│   │   ├── LoginPage.jsx
-│   │   ├── DashboardPage.jsx
-│   │   └── ...
-│   ├── services/               # Abstraksi Jaringan API (Layer Infrastruktur)
-│   │   └── apiService.js       # Axios instance & interceptors
-│   └── utils/                  # Utility helper (format uang, tanggal)
+smart-crm/
+├── backend/                    # Express.js REST API
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── database.js     # PostgreSQL connection pool
+│   │   ├── controllers/        # Business logic layer
+│   │   │   ├── authController.js
+│   │   │   ├── leadController.js
+│   │   │   ├── productController.js
+│   │   │   ├── projectController.js
+│   │   │   ├── customerController.js
+│   │   │   └── reportController.js
+│   │   ├── middleware/
+│   │   │   ├── authMiddleware.js   # JWT verify + role guard
+│   │   │   └── errorMiddleware.js  # Global error handler
+│   │   ├── routes/             # Express routers
+│   │   ├── database/
+│   │   │   ├── migrate.js      # DDL migration script
+│   │   │   └── seed.js         # Initial data seeder
+│   │   └── server.js           # App entry point
+│   ├── .env.example            # ← Copy ke .env
+│   ├── Dockerfile
+│   └── package.json
+│
+├── frontend/                   # React 18 + Vite + Tailwind
+│   ├── src/
+│   │   ├── components/         # Shared UI primitives & layout
+│   │   ├── constants/          # API endpoints, status maps
+│   │   ├── context/            # AuthContext (global state)
+│   │   ├── pages/              # Route-level page components
+│   │   ├── services/           # Axios instance + interceptors
+│   │   └── utils/              # Format helpers (Rupiah, date)
+│   ├── .env.example            # ← Copy ke .env
+│   ├── Dockerfile
+│   └── vite.config.js
+│
+├── docker-compose.yml
 └── README.md
 ```
 
@@ -85,28 +104,31 @@ cp .env.example .env
 # Pastikan VITE_API_BASE_URL=http://localhost:5001/api
 
 npm install
-npm run dev       # Jalankan di port 3000
+npm run dev       # Jalankan di port 5173
 ```
 
-**3. Buka browser:** http://localhost:3000
+**3. Buka browser:** http://localhost:5173
 
 ---
 
-### Option B: Docker Compose (Containerization)
-
-Sebagai nilai tambah arsitektur *deployment*, kami telah menyediakan `Dockerfile` dan `docker-compose.yml` khusus untuk isolasi servis *Frontend*:
+### Option B: Docker Compose
 
 ```bash
-# 1. Setup env file
-cp .env.example .env
+# 1. Setup env files
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
 
-# 2. Jalankan container frontend
-docker-compose up -d --build
+# 2. Edit backend/.env — sesuaikan DB_PASSWORD dan JWT_SECRET
 
-# 3. Frontend akan berjalan dan bisa diakses via browser
+# 3. Jalankan semua service
+docker-compose up --build
+
+# 4. Jalankan migrasi & seed (sekali saja)
+docker-compose exec backend node src/database/migrate.js
+docker-compose exec backend node src/database/seed.js
 ```
 
-**Buka browser:** http://localhost:3000
+**Buka browser:** http://localhost:5173
 
 ---
 
@@ -164,14 +186,34 @@ docker-compose up -d --build
 
 ---
 
-## 📦 Deploy ke Cloud
+## 📦 Panduan Deploy ke Cloud (Production)
 
-**Railway / Render (recommended):**
-1. Push repo ke GitHub
-2. Buat project baru di Railway/Render
-3. Tambahkan service PostgreSQL
-4. Set environment variables sesuai `.env.example`
-5. Deploy backend & frontend sebagai service terpisah
+Arsitektur aplikasi ini terdiri dari Frontend SPA (React/Vite) dan Backend REST API (Express.js). Berikut adalah dokumentasi deployment menggunakan Vercel dan Railway:
+
+### 1. Deploy Database & Backend (Railway)
+1. Buat akun di [Railway.app](https://railway.app/).
+2. Buat project baru dan pilih **Provision PostgreSQL** untuk membuat database.
+3. Deploy Backend: Klik **New -> GitHub Repo** dan pilih repositori ini.
+4. Masuk ke **Settings** service Backend:
+   - Root Directory: `backend`
+   - Build Command: `npm install`
+   - Start Command: `node src/server.js`
+5. Masuk ke **Variables** service Backend:
+   - Tambahkan `DATABASE_URL` (pilih opsi *Reference* ke PostgreSQL)
+   - Tambahkan `PORT` = `5001`
+   - Tambahkan `NODE_ENV` = `production`
+   - Tambahkan `JWT_SECRET` = *(Password rahasia Anda)*
+   - Tambahkan `FRONTEND_URL` = `https://<URL_VERCEL_ANDA>.vercel.app` (Sangat penting untuk mengatasi CORS)
+6. Jalankan migrasi dan seed database secara lokal dengan memasukkan `DATABASE_URL` publik Railway ke `.env` Anda, lalu jalankan: `npm run migrate && npm run seed`.
+
+### 2. Deploy Frontend (Vercel)
+1. Login ke [Vercel](https://vercel.com/) dan buat project baru dari repository GitHub Anda.
+2. Pada pengaturan awal (Configure Project):
+   - **Root Directory**: Wajib diubah menjadi `frontend`.
+   - **Framework Preset**: Vite (otomatis terdeteksi).
+3. Pada menu **Environment Variables**, tambahkan:
+   - `VITE_API_BASE_URL` = `https://<URL_BACKEND_RAILWAY_ANDA>/api`
+4. Klik **Deploy**.
 
 ---
 
