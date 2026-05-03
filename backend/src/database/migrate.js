@@ -15,7 +15,7 @@ const SQL_CREATE_TABLES = `
 
   CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
-    product_name VARCHAR(150) NOT NULL,
+    product_name VARCHAR(150) UNIQUE NOT NULL,
     description TEXT,
     base_cost NUMERIC(15, 2) NOT NULL,
     margin_percent NUMERIC(5, 2) NOT NULL,
