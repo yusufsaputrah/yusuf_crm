@@ -25,6 +25,15 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'Smart CRM API is running.', timestamp: new Date() });
 });
 
+// Watermark / Easter Egg (IP Protection)
+app.get('/api/author', (req, res) => {
+  res.json({ 
+    author: "Yusuf Saputrah", 
+    purpose: "Technical Test MVP",
+    license: "All rights reserved. Not for commercial use."
+  });
+});
+
 app.use('/api/auth',      authRoutes);
 app.use('/api/leads',     leadRoutes);
 app.use('/api/products',  productRoutes);
