@@ -3,11 +3,14 @@
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Search, ChevronDown, Phone, Mail, Users, Wallet } from 'lucide-react';
+import { Search, ChevronDown, Phone, Mail, Users, Wallet, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import apiService from '../services/apiService';
 import { formatRupiah, formatDate } from '../utils/formatUtils';
 import { PageLoader, EmptyState } from '../components/UIComponents';
+
+const manIconUrl = new URL('../assets/icons/bussiness-man.png', import.meta.url).href;
+const womanIconUrl = new URL('../assets/icons/businesswoman.png', import.meta.url).href;
 
 // Customer Services Detail
 const CustomerDetail = ({ customerId }) => {
@@ -101,13 +104,18 @@ const CustomersPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <motion.div
-        className="page-header flex-wrap gap-2"
+        className="flex items-center justify-between gap-3 flex-wrap mb-6"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div>
-          <h1 className="page-title">Customer Aktif</h1>
-          <p className="page-subtitle">{customers.length} customer terdaftar</p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center shadow-sm">
+            <Users size={20} className="text-violet-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Customer Aktif</h1>
+            <p className="text-sm text-slate-500 mt-0.5">{customers.length} customer terdaftar</p>
+          </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-white rounded-xl border border-slate-100 shadow-sm text-xs text-slate-500 font-medium">
@@ -168,10 +176,12 @@ const CustomersPage = () => {
                     onClick={() => setExpandedId(isExpanded ? null : customer.id)}
                   >
                     {/* Avatar */}
-                    <div className="w-9 h-9 bg-sky-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
-                      <span className="text-white text-sm font-bold">
-                        {customer.full_name.charAt(0).toUpperCase()}
-                      </span>
+                    <div className="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center flex-shrink-0 p-1.5 border border-violet-100">
+                      <img 
+                        src={customer.gender === 'wanita' ? womanIconUrl : manIconUrl} 
+                        alt="Avatar" 
+                        className="w-full h-full object-contain drop-shadow-sm" 
+                      />
                     </div>
 
                     {/* Info */}
@@ -192,6 +202,11 @@ const CustomersPage = () => {
                             <Mail size={10} />{customer.email}
                           </span>
                         )}
+                        {customer.gender && (
+                          <span className="flex items-center gap-1 text-xs text-slate-400 capitalize">
+                            <User size={10} />{customer.gender}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -199,7 +214,7 @@ const CustomersPage = () => {
                     <div className="flex items-center gap-3 flex-shrink-0">
                       <div className="text-right hidden sm:block">
                         <p className="text-xs text-slate-400">{customer.service_count} layanan</p>
-                        <p className="text-sm font-bold text-sky-600">
+                        <p className="text-sm font-bold text-slate-900">
                           {formatRupiah(customer.monthly_value)}/bln
                         </p>
                       </div>

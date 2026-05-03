@@ -219,16 +219,21 @@ const ReportsPage = () => {
 
       {/* ── Header ── */}
       <motion.div
-        className="flex items-center justify-between gap-3 flex-wrap"
+        className="flex items-center justify-between gap-3 flex-wrap mb-4"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div>
-          <p className="text-[11px] font-semibold text-sky-500 uppercase tracking-widest mb-0.5">Analitik</p>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Laporan Penjualan</h1>
-          <p className="text-sm text-slate-400 mt-0.5">
-            {formatPeriod(startDate)} — {formatPeriod(endDate)}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center shadow-sm">
+            <TrendingUp size={20} className="text-amber-600" />
+          </div>
+          <div>
+            <p className="text-[11px] font-semibold text-sky-500 uppercase tracking-widest mb-0.5">Analitik</p>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Laporan Penjualan</h1>
+            <p className="text-sm text-slate-400 mt-0.5">
+              {formatPeriod(startDate)} — {formatPeriod(endDate)}
+            </p>
+          </div>
         </div>
         <motion.button
           className="btn-primary flex-shrink-0"

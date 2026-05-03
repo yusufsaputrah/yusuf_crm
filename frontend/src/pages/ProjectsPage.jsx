@@ -17,6 +17,8 @@ import { formatRupiah, formatDate } from '../utils/formatUtils';
 import { useAuth } from '../context/AuthContext';
 import { Modal, Badge, PageLoader, EmptyState, FormGroup } from '../components/UIComponents';
 
+const customerIconUrl = new URL('../assets/icons/customer.png', import.meta.url).href;
+
 // ─── Project Form ──────────────────────────────────────────────────────────────
 const ProjectForm = ({ onSubmit, isLoading }) => {
   const [projectName, setProjectName] = useState('');
@@ -293,13 +295,18 @@ const ProjectsPage = () => {
     <div className="space-y-5">
       {/* Header */}
       <motion.div
-        className="flex items-center justify-between gap-3"
+        className="flex items-center justify-between gap-3 flex-wrap"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div>
-          <h1 className="page-title">Deal Pipeline</h1>
-          <p className="page-subtitle">Proses konversi lead menjadi customer</p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shadow-sm">
+            <Briefcase size={20} className="text-emerald-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Deal Pipeline</h1>
+            <p className="text-sm text-slate-500 mt-0.5">Proses konversi lead menjadi customer</p>
+          </div>
         </div>
         <motion.button
           className="btn-primary flex-shrink-0"
@@ -357,8 +364,8 @@ const ProjectsPage = () => {
                 <div className="p-4">
                   <div className="flex items-start gap-3">
                     {/* Icon */}
-                    <div className="w-9 h-9 bg-sky-50 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <Briefcase size={16} className="text-sky-600" />
+                    <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center p-1.5 border border-emerald-100 flex-shrink-0 mt-0.5 shadow-sm">
+                      <img src={customerIconUrl} alt="Deal" className="w-full h-full object-contain drop-shadow-sm" />
                     </div>
 
                     {/* Info */}

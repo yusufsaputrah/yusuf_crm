@@ -13,6 +13,8 @@ import {
   Modal, PageLoader, EmptyState, ConfirmDialog, FormGroup,
 } from '../components/UIComponents';
 
+const routerIconUrl = new URL('../assets/icons/wireless-router.png', import.meta.url).href;
+
 const ProductForm = ({ initialData, onSubmit, isLoading }) => {
   const [form, setForm] = useState({
     productName:   initialData?.product_name   || '',
@@ -110,13 +112,18 @@ const ProductsPage = () => {
     <div className="space-y-6">
       {/* Header */}
       <motion.div
-        className="page-header"
+        className="flex items-center justify-between gap-3 flex-wrap mb-6"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div>
-          <h1 className="page-title">Master Produk</h1>
-          <p className="page-subtitle">Daftar paket layanan internet</p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center shadow-sm">
+            <Package size={20} className="text-violet-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Master Produk</h1>
+            <p className="text-sm text-slate-500 mt-0.5">Daftar paket layanan internet</p>
+          </div>
         </div>
         {isManager && (
           <motion.button
@@ -150,8 +157,8 @@ const ProductsPage = () => {
             >
               {/* Card header */}
               <div className="flex items-start justify-between mb-4">
-                <div className="w-11 h-11 bg-sky-50 rounded-xl flex items-center justify-center group-hover:bg-sky-100 transition-colors">
-                  <Package size={20} className="text-sky-600" />
+                <div className="w-11 h-11 bg-violet-50 rounded-xl flex items-center justify-center p-1.5 border border-violet-100 shadow-sm">
+                  <img src={routerIconUrl} alt="Router" className="w-full h-full object-contain drop-shadow-sm" />
                 </div>
                 {isManager && (
                   <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -190,9 +197,9 @@ const ProductsPage = () => {
                   </span>
                   <span className="font-medium text-slate-700">{product.margin_percent}%</span>
                 </div>
-                <div className="flex justify-between items-center border-t border-slate-100 pt-2 mt-1">
+                <div className="flex justify-between items-center border-t border-slate-100 pt-3 mt-2">
                   <span className="text-sm font-semibold text-slate-700">Harga Jual</span>
-                  <span className="text-sm font-bold text-sky-600">{formatRupiah(product.selling_price)}</span>
+                  <span className="text-base font-bold text-slate-900">{formatRupiah(product.selling_price)}</span>
                 </div>
               </div>
             </motion.div>

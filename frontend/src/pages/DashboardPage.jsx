@@ -19,6 +19,9 @@ import { formatRupiah, formatDate } from '../utils/formatUtils';
 import { PageLoader, Badge } from '../components/UIComponents';
 import { LEAD_STATUSES, PROJECT_STATUSES } from '../constants/appConstants';
 
+const manIconUrl = new URL('../assets/icons/bussiness-man.png', import.meta.url).href;
+const womanIconUrl = new URL('../assets/icons/businesswoman.png', import.meta.url).href;
+
 /* ─── Konstanta ─────────────────────────────────────────────────────────────── */
 const STATUS_COLORS = {
   new:       '#0ea5e9',
@@ -318,10 +321,12 @@ const DashboardPage = () => {
                   initial={{ opacity: 0, x: -6 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.45 + i * 0.05 }}>
-                  <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center flex-shrink-0">
-                    <span className="text-sky-600 text-xs font-bold">
-                      {lead.full_name?.charAt(0).toUpperCase()}
-                    </span>
+                  <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center flex-shrink-0 p-1">
+                    <img 
+                      src={lead.gender === 'wanita' ? womanIconUrl : manIconUrl} 
+                      alt="avatar" 
+                      className="w-full h-full object-contain drop-shadow-sm" 
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-slate-800 truncate">{lead.full_name}</p>
@@ -364,8 +369,12 @@ const DashboardPage = () => {
               <motion.div key={c.id}
                 className="flex items-center gap-2.5 py-2 border-b border-slate-50 last:border-0"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 + i * 0.05 }}>
-                <div className="w-7 h-7 bg-sky-500 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <span className="text-white text-[10px] font-bold">{c.full_name?.charAt(0)}</span>
+                <div className="w-7 h-7 bg-violet-50 border border-violet-100 rounded-lg flex items-center justify-center flex-shrink-0 p-0.5">
+                  <img 
+                    src={c.gender === 'wanita' ? womanIconUrl : manIconUrl} 
+                    alt="avatar" 
+                    className="w-full h-full object-contain drop-shadow-sm" 
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-slate-700 truncate">{c.full_name}</p>

@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Search, Edit2, Trash2, Phone, Mail, MapPin, Filter, User } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Phone, Mail, MapPin, Filter, User, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import apiService from '../services/apiService';
@@ -14,6 +14,9 @@ import {
   ConfirmDialog, FormGroup,
 } from '../components/UIComponents';
 
+const manIconUrl = new URL('../assets/icons/bussiness-man.png', import.meta.url).href;
+const womanIconUrl = new URL('../assets/icons/businesswoman.png', import.meta.url).href;
+
 // ─── Lead Form ─────────────────────────────────────────────────────────────────
 const LeadForm = ({ initialData, onSubmit, isLoading }) => {
   const [form, setForm] = useState({
@@ -21,6 +24,7 @@ const LeadForm = ({ initialData, onSubmit, isLoading }) => {
     phone:        initialData?.phone         || '',
     email:        initialData?.email         || '',
     address:      initialData?.address       || '',
+    gender:       initialData?.gender        || 'pria',
     requirements: initialData?.requirements  || '',
     status:       initialData?.status        || 'new',
   });
@@ -43,12 +47,18 @@ const LeadForm = ({ initialData, onSubmit, isLoading }) => {
           </select>
         </FormGroup>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <FormGroup label="Telepon">
           <input name="phone" value={form.phone} onChange={handleChange} className="input" placeholder="08xxxxxxxxxx" />
         </FormGroup>
         <FormGroup label="Email">
           <input type="email" name="email" value={form.email} onChange={handleChange} className="input" placeholder="john@example.com" />
+        </FormGroup>
+        <FormGroup label="Jenis Kelamin">
+          <select name="gender" value={form.gender} onChange={handleChange} className="input">
+            <option value="pria">Pria</option>
+            <option value="wanita">Wanita</option>
+          </select>
         </FormGroup>
       </div>
       <FormGroup label="Alamat">
@@ -76,8 +86,8 @@ const LeadCard = ({ lead, onEdit, onDelete, idx }) => (
   >
     <div className="flex items-start justify-between gap-2 mb-3">
       <div className="flex items-center gap-3 min-w-0">
-        <div className="w-9 h-9 bg-sky-50 rounded-xl flex items-center justify-center flex-shrink-0">
-          <User size={16} className="text-sky-600" />
+        <div className="w-10 h-10 bg-sky-50 border border-sky-100 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+          <User size={18} className="text-sky-600" />
         </div>
         <div className="min-w-0">
           <p className="font-semibold text-slate-900 text-sm truncate">{lead.full_name}</p>
@@ -96,6 +106,11 @@ const LeadCard = ({ lead, onEdit, onDelete, idx }) => (
       {lead.email && (
         <div className="flex items-center gap-1.5 text-xs text-slate-500">
           <Mail size={11} className="text-slate-400 flex-shrink-0" />{lead.email}
+        </div>
+      )}
+      {lead.gender && (
+        <div className="flex items-center gap-1.5 text-xs text-slate-500 capitalize">
+          <User size={11} className="text-slate-400 flex-shrink-0" />{lead.gender}
         </div>
       )}
       {lead.address && (
@@ -169,14 +184,19 @@ const LeadsPage = () => {
     <div className="space-y-5">
       {/* Header */}
       <motion.div
-        className="flex items-center justify-between gap-3"
+        className="flex items-center justify-between gap-3 flex-wrap"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.28 }}
       >
-        <div>
-          <h1 className="page-title">Leads</h1>
-          <p className="page-subtitle">{leads.length} calon customer terdaftar</p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center shadow-sm">
+            <Users size={20} className="text-sky-600" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Leads</h1>
+            <p className="text-sm text-slate-500 mt-0.5">{leads.length} calon customer terdaftar</p>
+          </div>
         </div>
         <motion.button
           className="btn-primary flex-shrink-0"
@@ -271,12 +291,23 @@ const LeadsPage = () => {
                 leads.map((lead, idx) => (
                   <motion.tr
                     key={lead.id}
-                    className="table-row-hover"
+                    className="hover:bg-sky-50/40 transition-colors duration-150"
                     initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.03, duration: 0.2 }}
                   >
-                    <td className="table-td font-semibold text-slate-900">{lead.full_name}</td>
+                    <td className="table-td">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-sky-50 flex items-center justify-center flex-shrink-0 p-1 border border-sky-100">
+                          <img 
+                            src={lead.gender === 'wanita' ? womanIconUrl : manIconUrl} 
+                            alt="Avatar" 
+                            className="w-full h-full object-contain drop-shadow-sm" 
+                          />
+                        </div>
+                        <span className="font-semibold text-slate-900">{lead.full_name}</span>
+                      </div>
+                    </td>
                     <td className="table-td">
                       <div className="space-y-1">
                         {lead.phone && (
@@ -287,6 +318,11 @@ const LeadsPage = () => {
                         {lead.email && (
                           <div className="flex items-center gap-1.5 text-xs text-slate-500">
                             <Mail size={11} className="text-slate-400" />{lead.email}
+                          </div>
+                        )}
+                        {lead.gender && (
+                          <div className="flex items-center gap-1.5 text-xs text-slate-500 capitalize">
+                            <User size={11} className="text-slate-400" />{lead.gender}
                           </div>
                         )}
                         {lead.address && (

@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }) => {
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN);
     localStorage.removeItem(STORAGE_KEYS.AUTH_USER);
-    setAuthUser(null);
+    window.location.href = '/login';
   }, []);
 
   const isAuthenticated = !!authUser;
