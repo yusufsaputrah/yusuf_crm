@@ -8,19 +8,22 @@ const poolConfig = {
 
 if (process.env.DATABASE_URL) {
   poolConfig.connectionString = process.env.DATABASE_URL;
+  
+  // Deteksi otomatis: Jika alamat mengandung 'railway.internal', JANGAN pakai SSL.
+  // Jika alamat publik (proxy), WAJIB pakai SSL.
+  if (process.env.DATABASE_URL.includes('railway.internal')) {
+    poolConfig.ssl = false;
+  } else {
+    poolConfig.ssl = { rejectUnauthorized: false };
+  }
 } else {
   poolConfig.host = process.env.DB_HOST;
   poolConfig.port = parseInt(process.env.DB_PORT, 10) || 5432;
   poolConfig.database = process.env.DB_NAME;
   poolConfig.user = process.env.DB_USER;
   poolConfig.password = process.env.DB_PASSWORD;
-}
-
-// Paksa SSL aktif untuk Railway (Proxy/Public memerlukan SSL)
-// Jika koneksi lokal, biasanya env DATABASE_URL tidak ada, kita bisa beri kondisi tambahan jika perlu.
-const isProduction = process.env.NODE_ENV === 'production' || process.env.DATABASE_URL || process.env.DB_HOST?.includes('rlwy.net');
-
-if (isProduction) {
+  
+  // Default untuk variabel satuan biasanya proxy publik, jadi pakai SSL
   poolConfig.ssl = { rejectUnauthorized: false };
 }
 
